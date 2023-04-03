@@ -148,6 +148,11 @@
             </a>
           </li>
           <li>
+            <a href="{% url 'service_meetings' %}">
+              <i class="bi bi-circle"></i><span>Service Meetings</span>
+            </a>
+          </li>
+          <li>
             <a href="{% url 'service_group' profile.service_group.service_group_id %}">
               <i class="bi bi-circle"></i><span>My Service Group</span>
             </a>
@@ -179,6 +184,25 @@
           <li>
             <a href="{% url 'schedule_requests' %}">
               <i class="bi bi-circle"></i><span>Schedule Requests</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Register Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#service-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-briefcase"></i>
+          <span>Service</span>
+        </a>
+        <ul id="service-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Calls</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Territories</span>
             </a>
           </li>
           <li>

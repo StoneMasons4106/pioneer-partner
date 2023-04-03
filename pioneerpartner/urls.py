@@ -35,6 +35,7 @@ urlpatterns = [
     path('posts/', include('posts.urls')),
     path('congregation/', include('congregations.urls')),
     path('schedule/', include('schedules.urls')),
+    path('service/', include('service.urls')),
     path('invites/', include('invites.urls')),
     path('notifications/', include('notifications.urls')),
     path('bug/', include('bugs.urls')),

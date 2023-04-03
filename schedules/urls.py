@@ -11,6 +11,4 @@ urlpatterns = [
     path('request/<str:username>/', views.request_to_work_together, name='request_to_work_together'),
     path('schedule_request/<str:request_id>/', views.schedule_request, name='schedule_request'),
     path('schedule_requests/', views.schedule_requests, name='schedule_requests'),
-    path('cart_shifts/', views.cart_shifts, name='cart_shifts'),
-    path('cart_shift/<int:shift_id>/', views.cart_shift, name='cart_shift'),
 ]

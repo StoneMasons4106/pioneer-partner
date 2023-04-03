@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'congregations',
     'invites',
     'schedules',
+    'service',
     'notifications',
     'bugs',
     'crispy_forms',

@@ -93,7 +93,7 @@ def user_view(request, username):
             token = os.environ.get('JUSTACART_TOKEN')
             shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={user.email}')
 
-            if shifts.text == 'ERROR: unknown email':
+            if "ERROR" in shifts.text:
                 shifts = {}
             elif shifts.json():
                 shifts = shifts.json()['data']
