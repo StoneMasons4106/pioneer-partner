@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>Group Service Meetings</h1>
+      </div>
+      {% for group in groups %}
+      {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'add_service_meeting' %}" class="btn btn-primary add-invite"><i class="bi bi-plus-circle"></i> Add Service Meeting</a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Group Service Meetings</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <!-- Recent Sales -->
+          <div class="col-12">
+            <div class="card schedule-requests-card recent-sales overflow-auto">
+              <div class="card-body">
+                <h5 class="card-title">Meetings</h5>
+
+                <table class="table table-borderless datatable">
+                  <thead>
+                    <tr>
+                      <th scope="col">Day</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for meeting in service_meetings %}
+                    <tr>
+                      <td>
+                        <a href="{% url 'service_meeting' meeting.id %}">{{ meeting.get_day_display }}</a>
+                      </td>
+                      <td>{{ meeting.time }}</td>
+                      {% if meeting.service_location %}
+                      <td>{{ meeting.service_location }}</td>
+                      {% elif meeting.service_group.service_location %}
+                      <td>{{ meeting.service_group.service_location }}</td>
+                      {% else %}
+                      <td>{{ meeting.congregation.address }}</td>
+                      {% endif %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End Recent Sales -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

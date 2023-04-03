@@ -1,0 +1,281 @@
+{% load static %}
+{% load i18n %}
+{% load notification_tools %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% load pwa %}
+{% progressive_web_app_meta %}
+<link rel="manifest" href="manifest.json">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  {% if title %}
+  <title>{{ title }}</title>
+  {% else %}
+  <title>Pioneer Partner</title>
+  {% endif %}
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'niceadmin/assets/img/pioneerpartner-favicon.png' %}" rel="icon">
+  <link href="{% static 'niceadmin/assets/img/pioneerpartner-favicon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'niceadmin/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'niceadmin/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'niceadmin/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'niceadmin/assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'niceadmin/assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'niceadmin/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'niceadmin/assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'niceadmin/assets/css/style.css' %}" rel="stylesheet">
+
+  <!-- My CSS -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+  {% if page %}
+    {% if page == 'Edit Congregation' %}
+      {{ form.media }}
+    {% endif %}
+  {% endif %}
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.4.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'dashboard' %}" class="logo d-flex align-items-center">
+        <i class="bi bi-people-fill"></i>
+        <span class="d-none d-lg-block">Pioneer Partner</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number"></span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header">
+              You have <span class="notification-statement"></span> new notifications
+              <a href="{% url 'new_notifications' %}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            {% for notification in notifications|notifications %}
+            {% if notification.user == request.user %}
+            <li class="notification-item">
+              <i class="bi bi-circle-fill text-primary"></i>
+              <div>
+                <h4>{{ notification.get_type_display }}</h4>
+                <p>{{ notification.info }}</p>
+                <p>{{ notification.created | timesince }} ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            <li class="dropdown-footer">
+              <a href="{% url 'all_notifications' %}">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'dashboard' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'add_post' %}">
+          <i class="bi bi-pencil-square"></i>
+          <span>Post</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#congregation-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-house"></i>
+          <span>Congregation</span>
+        </a>
+        <ul id="congregation-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'congregation' %}">
+              <i class="bi bi-circle"></i><span>Congregation View</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'service_group' profile.service_group.service_group_id %}">
+              <i class="bi bi-circle"></i><span>My Service Group</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Register Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#schedule-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar"></i>
+          <span>Schedule</span>
+        </a>
+        <ul id="schedule-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'regular_days' %}">
+              <i class="bi bi-circle"></i><span>Regular Days</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'whos_out_when_im_out' %}">
+              <i class="bi bi-circle"></i><span>Who's Out When I'm Out?</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'congregation_view' %}">
+              <i class="bi bi-circle"></i><span>Congregation View</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'schedule_requests' %}">
+              <i class="bi bi-circle"></i><span>Schedule Requests</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'cart_shifts' %}">
+              <i class="bi bi-circle"></i><span>Cart Shifts</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Register Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'profile' %}">
+          <i class="bi bi-person"></i>
+          <span>{{ request.user.username }}</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'bug' %}">
+          <i class="bi bi-bug"></i>
+          <span>Report a Bug</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item" style="cursor: pointer;">
+        <form method="post" id="signout" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <a onclick="document.getElementById('signout').submit()" class="nav-link collapsed">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </form>
+      </li><!-- End Login Page Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            {% with message.level as level %}
+                {% if level == 40 %}
+                    {% include 'includes/toasts/toast_error.html' %}
+                {% elif level == 30 %}
+                    {% include 'includes/toasts/toast_warning.html' %}
+                {% elif level == 25 %}
+                    {% include 'includes/toasts/toast_success.html' %}
+                {% else %}
+                    {% include 'includes/toasts/toast_info.html' %}
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+  {% endif %}
+
+  {% block content %}
+
+  {% endblock %}
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Pioneer Partner</span></strong>. All Rights Reserved
+    </div>
+    
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'niceadmin/assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/chart.js/chart.min.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/echarts/echarts.min.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'niceadmin/assets/vendor/php-email-form/validate.js' %}"></script>
+
+  {% if not page %}
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  {% endif %}
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'niceadmin/assets/js/main.js' %}"></script>
+
+  <!-- My JS -->
+  <script src="{% static 'js/alert.js' %}"></script>
+  <script src="{% static 'js/notificationCount.js' %}"></script>
+  <script src="{% static 'js/profilepicture.js' %}"></script>
+  <script src="{% static 'js/like.js' %}"></script>
+  <script src="{% static 'js/comment.js' %}"></script>
+  <script src="{% static 'js/bookmark.js' %}"></script>
+  <script src="{% static 'js/markNotificationRead.js' %}"></script>
+
+</body>
+
+</html>

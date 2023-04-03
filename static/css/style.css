@@ -1,0 +1,123 @@
+.pointer {
+    cursor: pointer;
+}
+
+.bi-people-fill {
+    font-size: x-large;
+    margin-right: 5px;
+}
+
+.alert {
+    margin-top: 60px;
+    height: 60px;
+}
+
+.alert svg {
+    width: 30px;
+    height: 30px;
+}
+
+.alert .btn-close {
+    width: 50px;
+    position: absolute;
+    right: 0;
+}
+
+.profile-overview img {
+    max-width: 200px;
+}
+
+.rounded-circle {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+#id_profile_picture,
+#profile_picture-clear_id {
+    display: none;
+}
+
+.profile-picture-wrapper {
+    font-size: 0;
+}
+
+.profile-picture-wrapper a,
+.profile-picture-wrapper input,
+.profile-picture-wrapper label,
+.profile-picture-wrapper br {
+    display: none;
+}
+
+#upload-profile-picture,
+#delete-profile-picture-button {
+    display: inline-block;
+}
+
+.post-user-link {
+    color: #798eb3;
+}
+
+.post-content {
+    color: #012970;
+}
+
+.post-content:hover {
+    color: #012970;
+}
+
+.comment-card {
+    width: 95%;
+    margin-left: auto;
+}
+
+.card-header .post-menu {
+    float: right;
+}
+
+.invite-card-body {
+    padding: 0px;
+}
+
+.invite-card {
+    margin-bottom: 10px;
+}
+
+.delete-invite-form,
+.delete-regular-day-form {
+    margin-left: auto;
+    margin-right: 32px;
+}
+
+.edit-invite-button {
+    margin-left: auto;
+}
+
+.whos-out-name {
+    width: 37.6%;
+}
+
+.userview-schedule-data {
+    margin-top: 10px;
+}
+
+.schedule-requests-card .dataTable-search,
+.schedule-requests-card .dataTable-dropdown,
+.schedule-requests-card .dataTable-bottom {
+    display: none;
+}
+
+.invite-icon {
+    color: red;
+    background: rgb(250, 237, 237);
+}
+
+.briefcase-icon {
+    color: purple !important;
+    background: rgb(255, 236, 255) !important;
+}
+
+@media (max-width: 767px) {
+    .dashboard .info-card h6 {
+        font-size: 20px;
+    }
+}

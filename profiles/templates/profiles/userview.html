@@ -1,0 +1,328 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        {% if user.first_name and user.last_name %}
+        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+        {% else %}
+        <h1>{{ user.username }}</h1>
+        {% endif %}
+      </div>
+      <div class="col-lg-4 col-6 text-end">
+        {% for group in groups %}
+        {% if group.name == "Congregation Admin" %}
+        <a
+          href="{% url 'edit_user' user.username %}"
+          class="btn btn-primary"
+          ><i class="bi bi-pencil"></i> Edit User Info</a
+        >
+        {% else %}
+        <p>Not An Admin</p>
+        {% endif %}
+        {% endfor %}
+        <a
+          href="{% url 'request_to_work_together' user.username %}"
+          class="btn btn-success"
+          ><i class="bi bi-question-lg"></i> Request to Work Together</a
+        >
+      </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Userview</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-8">
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+              <li class="nav-item">
+                <button
+                  class="nav-link active"
+                  data-bs-toggle="tab"
+                  data-bs-target="#profile-overview"
+                >
+                  Overview
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#posts"
+                >
+                  Posts
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#schedule"
+                >
+                  Schedule
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#cart-shifts"
+                >
+                  Cart Shifts
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-2">
+              <div
+                class="tab-pane fade show active profile-overview"
+                id="profile-overview"
+              >
+                <div class="row">
+                  <div class="col-xxl-4">
+                    {% if user_profile.profile_picture %}
+                    <img
+                      src="{{ MEDIA_URL }}{{ user_profile.profile_picture }}"
+                      alt="Profile Picture"
+                      class="rounded-circle"
+                    />
+                    {% else %}
+                    <img
+                      src="{{ MEDIA_URL }}noimage.webp"
+                      alt="No Profile Picture"
+                      class="rounded-circle"
+                    />
+                    {% endif %}
+                  </div>
+                  <div class="col-xxl-8">
+                    <h5 class="card-title">Bio:</h5>
+                    <p class="small">{{ user_profile.bio }}</p>
+                  </div>
+                </div>
+
+                <h5 class="card-title">Profile Details</h5>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Full Name:</div>
+                  {% if user.first_name and user.last_name %}
+                  <div class="col-lg-9 col-md-8">
+                    {{ user.first_name }} {{ user.last_name }}
+                  </div>
+                  {% else %}
+                  <div class="col-lg-9 col-md-8">None</div>
+                  {% endif %}
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Location:</div>
+                  {% if user_profile.location %}
+                  <div class="col-lg-9 col-md-8">{{ user_profile.location }}</div>
+                  {% else %}
+                  <div class="col-lg-9 col-md-8">None</div>
+                  {% endif %}
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Email:</div>
+                  {% if user.email %}
+                  <div class="col-lg-9 col-md-8">
+                    <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                  </div>
+                  {% else %}
+                  <div class="col-lg-9 col-md-8">None</div>
+                  {% endif %}
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Congregation:</div>
+                  {% if user_profile.congregation %}
+                  <div class="col-lg-9 col-md-8">
+                    <a href="{% url 'congregation' %}">{{ user_profile.congregation.name }}</a>
+                  </div>
+                  {% else %}
+                  <div class="col-lg-9 col-md-8">None</div>
+                  {% endif %}
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Service Group:</div>
+                  {% if user_profile.service_group %}
+                  <div class="col-lg-9 col-md-8"><a href="{% url 'service_group' user_profile.service_group.service_group_id %}">{{ user_profile.service_group }}</a></div>
+                  {% else %}
+                  <div class="col-lg-9 col-md-8">None</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="tab-pane fade" id="posts">
+                {% for post in posts %}
+                <!-- Card with header and footer -->
+                <div class="card mt-3">
+                  {% if post.user.first_name and user.last_name %}
+                  <div class="card-header">
+                    <a
+                      href="{% url 'userview' post.user.username %}"
+                      class="post-user-link"
+                      ><b
+                        >{{ post.user.first_name }} {{ post.user.last_name }}</b
+                      ></a
+                    >
+                    @{{ post.user.username }} {{ post.created | timesince }} ago
+                  </div>
+                  {% else %}
+                  <div class="card-header">
+                    <a
+                      href="{% url 'userview' post.user.username %}"
+                      class="post-user-link"
+                      >@{{ post.user.username }}</a
+                    >
+                    {{ post.created | timesince }} ago
+                  </div>
+                  {% endif %}
+                  <a
+                    href="{% url 'post' post.post_id %}"
+                    class="pointer post-content"
+                  >
+                    <div class="card-body mt-3">{{ post.text_input }}</div>
+                  </a>
+                  <div class="card-footer">
+                    <input
+                      type="hidden"
+                      id="post-id"
+                      name="post-id"
+                      value="{{ post.post_id }}"
+                    />
+                    <div class="row">
+                      <div class="col-4 comment-column text-center">
+                        <i class="bi bi-chat pointer comment-button"></i>
+                        <span class="number-of-comments"
+                          >{{ post.number_of_comments }}</span
+                        >
+                      </div>
+                      <div class="col-4 like-column text-center">
+                        {% if request.user in post.is_liked %}
+                        <i class="bi bi-heart-fill pointer like-button"></i>
+                        <span class="number-of-likes"
+                          >{{ post.number_of_likes }}</span
+                        >
+                        {% else %}
+                        <i class="bi bi-heart pointer like-button"></i>
+                        <span class="number-of-likes"
+                          >{{ post.number_of_likes }}</span
+                        >
+                        {% endif %}
+                      </div>
+                      <div class="col-4 bookmark-column text-center">
+                        {% if request.user in post.is_bookmarked %}
+                        <i
+                          class="bi bi-bookmark-fill pointer bookmark-button"
+                        ></i>
+                        {% else %}
+                        <i class="bi bi-bookmark pointer bookmark-button"></i>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Card with header and footer -->
+                {% endfor %}
+              </div>
+              <div class="tab-pane fade" id="schedule">
+                {% for day in service_days %}
+                <div class="row">
+                  <!-- Sales Card -->
+                  <div class="col">
+                    <div class="card info-card invite-card">
+                      <div class="card-body invite-card-body">
+                        <div class="d-flex align-items-center">
+                          <div
+                            class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                          >
+                            <i class="bi bi-calendar"></i>
+                          </div>
+                          <div class="ps-3 userview-schedule-data">
+                            <h6>
+                              {{ day.get_day_display }} / {{ day.start_time }} -
+                              {{ day.end_time }}
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Sales Card -->
+                </div>
+                {% endfor %}
+              </div>
+              <div class="tab-pane fade" id="cart-shifts">
+                <section class="section dashboard">
+                  <div class="row">
+                    <!-- Left side columns -->
+                    <div class="col-12">
+                      <div class="row">
+                        <!-- Recent Sales -->
+                        <div class="col-12">
+                          <div class="card schedule-requests-card recent-sales overflow-auto">
+                            <div class="card-body">
+                              <h5 class="card-title">Shifts</h5>
+              
+                              <table class="table table-borderless datatable">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Time Range</th>
+                                    <th scope="col">Keyman</th>
+                                    <th scope="col">Keyman Contact</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for shift in shifts %}
+                                  <tr>
+                                    <td><a href="{% url 'user_cart_shift' user.username shift.Schedule.id %}">{{ shift.Schedule.date }}</a></td>
+                                    <td>{{ shift.Location.name }}</td>
+                                    <td>{{ shift.Schedule.start }} - {{ shift.Schedule.end }}</td>
+                                    {% if shift.Keyman.first_name %}
+                                    <td>{{ shift.Keyman.first_name }} {{ shift.Keyman.last_name }}</td>
+                                    {% else %}
+                                    <td>-</td>
+                                    {% endif %}
+                                    {% if shift.Keyman.phone %}
+                                    <td><a href="tel:{{ shift.Keyman.phone }}">{{ shift.Keyman.phone }}</a></td>
+                                    {% else %}
+                                    <td>-</td>
+                                    {% endif %}
+                                  </tr>
+                                  {% endfor %} 
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End Recent Sales -->
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <!-- End Bordered Tabs -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+{% endblock %}

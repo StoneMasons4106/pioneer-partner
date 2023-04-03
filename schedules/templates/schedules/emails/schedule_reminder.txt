@@ -1,0 +1,8 @@
+Hello {{ requesting_name }} and {{ to_name }}!
+
+This is a reminder that you have service plans scheduled for today!
+
+If you'd like to view the details for these plans, please visit: {{ my_hostname }}schedule/schedule_requests/
+
+Thank you for using Pioneer Partner!
+{{ my_hostname }}

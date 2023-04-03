@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+      <div class="row">
+        <div class="col-lg-4 col-6">
+          <h1>Service Groups</h1>
+        </div>
+        <div class="col-lg-4 col-6 text-end">
+          <a href="{% url 'add_service_group' %}" class="btn btn-primary add-invite"><i class="bi bi-plus-circle"></i> Add Service Group</a>
+        </div>
+      </div>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'congregation' %}">Congregation</a>
+          </li>
+          <li class="breadcrumb-item active">Service Groups</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+          <!-- Left side columns -->
+          <div class="col-lg-8">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card overflow-auto">
+                        <div class="card-body">
+                        <h5 class="card-title">Service Groups</h5>
+                        <table class="table table-borderless">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Location</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for group in service_groups %}
+                            <tr>
+                                <td>
+                                <a href="{% url 'service_group' group.service_group_id %}"
+                                    >{{ group.name }}</a
+                                >
+                                </td>
+                                <td>{{ group.service_location }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </section>
+</main>
+
+{% endblock %}

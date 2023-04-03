@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<main id="main" class="main">
+
+<div class="pagetitle">
+    <h1>Profile</h1>
+    <nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Profile</li>
+    </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section profile">
+    <div class="row">
+
+    <div class="col-xl-8">
+
+        <div class="card">
+        <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#posts">Posts</button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#bookmarks">Bookmarks</button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+            </li>
+
+            </ul>
+            <div class="tab-content pt-2">
+
+            <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                
+                <div class="row">
+                    <div class="col-xxl-4">
+                        {% if profile.profile_picture %}
+                        <img src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture" class="rounded-circle">
+                        {% else %}
+                        <img src="{{ MEDIA_URL }}noimage.webp" alt="No Profile Picture" class="rounded-circle">
+                        {% endif %}
+                    </div>
+                    <div class="col-xxl-8">
+                        <h5 class="card-title">Bio:</h5>
+                        <p class="small">{{ profile.bio }}</p>
+                    </div>
+                </div>
+
+                <h5 class="card-title">Profile Details</h5>
+
+                <div class="row">
+                <div class="col-lg-3 col-md-4 label ">Full Name:</div>
+                {% if user.first_name and user.last_name %}
+                <div class="col-lg-9 col-md-8">{{ user.first_name }} {{ user.last_name }}</div>
+                {% else %}
+                <div class="col-lg-9 col-md-8">None</div>
+                {% endif %}
+                </div>
+
+                <div class="row">
+                <div class="col-lg-3 col-md-4 label">Location:</div>
+                {% if profile.location %}
+                <div class="col-lg-9 col-md-8">{{ profile.location }}</div>
+                {% else %}
+                <div class="col-lg-9 col-md-8">None</div>
+                {% endif %}
+                </div>
+
+                <div class="row">
+                <div class="col-lg-3 col-md-4 label">Email:</div>
+                {% if user.email %}
+                <div class="col-lg-9 col-md-8"><a href="mailto:{{ user.email }}">{{ user.email }}</a></div>
+                {% else %}
+                <div class="col-lg-9 col-md-8">None</div>
+                {% endif %}
+                </div>
+
+                <div class="row">
+                <div class="col-lg-3 col-md-4 label">Congregation:</div>
+                {% if profile.congregation %}
+                <div class="col-lg-9 col-md-8"><a href="{% url 'congregation' %}">{{ profile.congregation.name }}</a></div>
+                {% else %}
+                <div class="col-lg-9 col-md-8">None</div>
+                {% endif %}
+                </div>
+
+                <div class="row">
+                <div class="col-lg-3 col-md-4 label">Service Group:</div>
+                {% if profile.service_group %}
+                <div class="col-lg-9 col-md-8"><a href="{% url 'service_group' profile.service_group.service_group_id %}">{{ profile.service_group }}</a></div>
+                {% else %}
+                <div class="col-lg-9 col-md-8">None</div>
+                {% endif %}
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade pt-3" id="posts">
+                {% for post in posts %}
+                <!-- Card with header and footer -->
+                <div class="card mt-3">
+                    {% if post.user.first_name and user.last_name %}
+                    <div class="card-header">
+                        <a href="{% url 'userview' post.user.username %}" class="post-user-link"><b>{{ post.user.first_name }} {{ post.user.last_name }}</b></a> @{{ post.user.username }} {{ post.created | timesince }} ago 
+                        {% if request.user == post.user %}
+                            <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' post.post_id %}">
+                                    <i class="bi bi-pencil"></i>
+                                    <span>Edit Post</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' post.post_id %}">
+                                    <i class="bi bi-trash"></i>
+                                    <span>Delete Post</span>
+                                  </a>
+                                </li>
+                            </ul><!-- End Profile Dropdown Items -->
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="card-header">
+                        <a href="{% url 'userview' post.user.username %}" class="post-user-link">@{{ post.user.username }}</a> {{ post.created | timesince }} ago 
+                        {% if request.user == post.user %}
+                            <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' post.post_id %}">
+                                    <i class="bi bi-pencil"></i>
+                                    <span>Edit Post</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' post.post_id %}">
+                                    <i class="bi bi-trash"></i>
+                                    <span>Delete Post</span>
+                                  </a>
+                                </li>
+                            </ul><!-- End Profile Dropdown Items -->
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'post' post.post_id %}" class="pointer post-content">
+                        <div class="card-body mt-3">
+                            {{ post.text_input }}
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                    <input type="hidden" id="post-id" name="post-id" value="{{ post.post_id }}">
+                    <div class="row">
+                        <div class="col-4 text-center">
+                        <i class="bi bi-chat pointer comment-button"></i> <span class="number-of-comments">{{ post.number_of_comments }}</span>
+                        </div>
+                        <div class="col-4 text-center">
+                        {% if request.user in post.is_liked %}
+                        <i class="bi bi-heart-fill pointer like-button"></i> <span class="number-of-likes">{{ post.number_of_likes }}</span>
+                        {% else %}
+                        <i class="bi bi-heart pointer like-button"></i> <span class="number-of-likes">{{ post.number_of_likes }}</span>
+                        {% endif %}
+                        </div>
+                        <div class="col-4 text-center">
+                        {% if request.user in post.is_bookmarked %}
+                        <i class="bi bi-bookmark-fill pointer bookmark-button"></i>
+                        {% else %}
+                        <i class="bi bi-bookmark pointer bookmark-button"></i>
+                        {% endif %}
+                        </div>
+                    </div>
+                    </div>
+                </div><!-- End Card with header and footer -->
+                {% endfor %}
+            </div>
+
+            <div class="tab-pane fade pt-3" id="bookmarks">
+                {% for bookmark in bookmarks %}
+                <!-- Card with header and footer -->
+                <div class="card mt-3">
+                    {% if bookmark.user.first_name and user.last_name %}
+                    <div class="card-header">
+                        <a href="{% url 'userview' bookmark.user.username %}" class="post-user-link"><b>{{ bookmark.user.first_name }} {{ bookmark.user.last_name }}</b></a> 
+                        @{{ bookmark.user.username }} {{ bookmark.created | timesince }} ago
+                        {% if request.user == bookmark.user %}
+                            <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' bookmark.post_id %}">
+                                    <i class="bi bi-pencil"></i>
+                                    <span>Edit Post</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' bookmark.post_id %}">
+                                    <i class="bi bi-trash"></i>
+                                    <span>Delete Post</span>
+                                  </a>
+                                </li>
+                            </ul><!-- End Profile Dropdown Items -->
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="card-header">
+                        <a href="{% url 'userview' bookmark.user.username %}" class="post-user-link">@{{ bookmark.user.username }}</a> 
+                        {{ bookmark.created | timesince }} ago
+                        {% if request.user == bookmark.user %}
+                            <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' bookmark.post_id %}">
+                                    <i class="bi bi-pencil"></i>
+                                    <span>Edit Post</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                  <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' bookmark.post_id %}">
+                                    <i class="bi bi-trash"></i>
+                                    <span>Delete Post</span>
+                                  </a>
+                                </li>
+                            </ul><!-- End Profile Dropdown Items -->
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'post' bookmark.post_id %}" class="pointer post-content">
+                        <div class="card-body mt-3">
+                            {{ bookmark.text_input }}
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                    <input type="hidden" id="post-id" name="post-id" value="{{ bookmark.post_id }}">
+                    <div class="row">
+                        <div class="col-4 comment-column text-center">
+                        <i class="bi bi-chat pointer comment-button"></i> <span class="number-of-comments">{{ bookmark.number_of_comments }}</span>
+                        </div>
+                        <div class="col-4 like-column text-center">
+                        {% if request.user in bookmark.is_liked %}
+                        <i class="bi bi-heart-fill pointer like-button"></i> <span class="number-of-likes">{{ bookmark.number_of_likes }}</span>
+                        {% else %}
+                        <i class="bi bi-heart pointer like-button"></i> <span class="number-of-likes">{{ bookmark.number_of_likes }}</span>
+                        {% endif %}
+                        </div>
+                        <div class="col-4 bookmark-column text-center">
+                        {% if request.user in bookmark.is_bookmarked %}
+                        <i class="bi bi-bookmark-fill pointer bookmark-button"></i>
+                        {% else %}
+                        <i class="bi bi-bookmark pointer bookmark-button"></i>
+                        {% endif %}
+                        </div>
+                    </div>
+                    </div>
+                </div><!-- End Card with header and footer -->
+                {% endfor %}
+            </div>
+
+            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                <!-- Profile Edit Form -->
+                <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form_two %}
+                <div class="row mb-3">
+                    <label for="{{ field.name }}" class="col-md-4 col-lg-3 col-form-label">{{ field.label }}</label>
+                    <div class="col-md-8 col-lg-9">
+                    {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% for field in form %}
+                {% if field.name == 'profile_picture' %}
+                <div class="row mb-3">
+                    <label for="{{ field.name }}" class="col-md-4 col-lg-3 col-form-label">{{ field.label }}</label>
+                    <div class="col-md-8 col-lg-9">
+                    {% if profile.profile_picture %}
+                    <img src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture" class="rounded-circle" id="profile-picture-edit">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}noimage.webp" alt="No Profile Picture" class="rounded-circle" id="profile-picture-edit">
+                    {% endif %}
+                    <div class="pt-2 profile-picture-wrapper">
+                        <a id="upload-profile-picture" class="btn btn-primary btn-sm" title="Upload new profile image" onclick="document.getElementById('id_profile_picture').click()"><i class="bi bi-upload"></i></a>
+                        {{ field }}
+                        <a id="delete-profile-picture-button" data-bs-toggle="modal" data-bs-target="#delete-profile-picture-modal" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                    </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row mb-3">
+                    <label for="{{ field.name }}" class="col-md-4 col-lg-3 col-form-label">{{ field.label }}</label>
+                    <div class="col-md-8 col-lg-9">
+                    {{ field }}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Changes</button>
+                </div>
+                </form><!-- End Profile Edit Form -->
+            
+            <div class="modal fade" id="delete-profile-picture-modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Profile Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you'd like to delete this picture?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="delete-profile-picture" onclick="document.getElementById('profile_picture-clear_id').click()">Delete</button>
+                </div>
+                </div>
+            </div>
+            </div>    
+            
+            </div>
+
+            <div class="tab-pane fade pt-3" id="profile-settings">
+
+                <!-- Settings Form -->
+                <form action="{% url 'update_settings' %}" method="POST" id="edit-notifications-form">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label" style="padding-top:0px;">Notifications</label>
+                    <div class="col-md-8 col-lg-9">
+                        <div class="form-check">
+                            {% if profile.liked_post_notifications %}
+                            <input class="form-check-input" type="checkbox" id="likedPost" name="liked-post" form="edit-notifications-form" checked>
+                            {% else %}
+                            <input class="form-check-input" type="checkbox" id="likedPost" name="liked-post" form="edit-notifications-form">
+                            {% endif %}
+                            <label class="form-check-label" for="likedPost">
+                            Liked Post
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            {% if profile.comment_post_notifications %}
+                            <input class="form-check-input" type="checkbox" id="commentPost" name="comment-post" form="edit-notifications-form" checked>
+                            {% else %}
+                            <input class="form-check-input" type="checkbox" id="commentPost" name="comment-post" form="edit-notifications-form">
+                            {% endif %}
+                            <label class="form-check-label" for="commentPost">
+                            Comment on Post
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Changes</button>
+                </div>
+                </form><!-- End settings Form -->
+
+            </div>
+
+            <div class="tab-pane fade pt-3" id="profile-change-password">
+                <!-- Change Password Form -->
+                <form method="POST" action="{% url 'account_change_password' %}">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                    <div class="col-md-8 col-lg-9">
+                    <input name="oldpassword" type="password" class="form-control" id="id_oldpassword">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                    <div class="col-md-8 col-lg-9">
+                    <input name="password1" type="password" class="form-control" id="id_password1">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                    <div class="col-md-8 col-lg-9">
+                    <input name="password2" type="password" class="form-control" id="id_password2">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-lock"></i> Change Password</button>
+                </div>
+                </form><!-- End Change Password Form -->
+
+            </div>
+
+            </div><!-- End Bordered Tabs -->
+
+        </div>
+        </div>
+
+    </div>
+    </div>
+</section>
+
+</main><!-- End #main -->
+
+{% endblock %}

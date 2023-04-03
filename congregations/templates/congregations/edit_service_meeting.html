@@ -1,0 +1,137 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+        <h1>Edit Service Meeting</h1>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'service_meetings' %}">Service Meetings</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'service_meeting' service_meeting.id %}">Service Meeting</a>
+        </li>
+        <li class="breadcrumb-item active">Edit Service Meeting</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section add-service-group">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3 mb-2">
+          <div class="card-body">
+            <form
+              class="row g-3 mt-1"
+              action="/congregation/service_meeting/edit/{{ service_meeting.id }}/"
+              method="post"
+              id="edit-service-meeting-form"
+            >
+              {% csrf_token %}
+              <select
+                required
+                class="form-select"
+                form="edit-service-meeting-form"
+                name="day"
+              > 
+                {% if service_meeting.day == "1" %}
+                <option value="1" selected>Monday</option>
+                {% else %}
+                <option value="1">Monday</option>
+                {% endif %}
+                {% if service_meeting.day == "2" %}
+                <option value="2" selected>Tuesday</option>
+                {% else %}
+                <option value="2">Tuesday</option>
+                {% endif %}
+                {% if service_meeting.day == "3" %}
+                <option value="3" selected>Wednesday</option>
+                {% else %}
+                <option value="3">Wednesday</option>
+                {% endif %}
+                {% if service_meeting.day == "4" %}
+                <option value="4" selected>Thursday</option>
+                {% else %}
+                <option value="4">Thursday</option>
+                {% endif %}
+                {% if service_meeting.day == "5" %}
+                <option value="5" selected>Friday</option>
+                {% else %}
+                <option value="5">Friday</option>
+                {% endif %}
+                {% if service_meeting.day == "6" %}
+                <option value="6" selected>Saturday</option>
+                {% else %}
+                <option value="6">Saturday</option>
+                {% endif %}
+                {% if service_meeting.day == "7" %}
+                <option value="7" selected>Sunday</option>
+                {% else %}
+                <option value="7">Sunday</option>
+                {% endif %}
+              </select>
+              <input
+                required
+                type="time"
+                form="edit-service-meeting-form"
+                name="time"
+                value="{{ time }}"
+                class="form-control"
+              />
+              <select
+                class="form-select"
+                form="edit-service-meeting-form"
+                name="service-group"
+              > 
+                {% if service_meeting.service_group %}
+                <option value> -- </option>
+                {% else %}
+                <option selected value> -- </option>
+                {% endif %}
+                {% for group in service_groups %}
+                {% if service_meeting.service_group == group %}
+                <option selected value="{{ group.id }}">{{ group.name }}</option>
+                {% else %}
+                <option value="{{ group.id }}">{{ group.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              {% if service_meeting.service_location %}
+              <input
+                type="text"
+                form="edit-service-meeting-form"
+                name="service-location"
+                class="form-control address"
+                placeholder="{{ service_meeting.service_location }}"
+              />
+              {% else %}
+              <input
+                type="text"
+                form="edit-service-meeting-form"
+                name="service-location"
+                class="form-control address"
+                placeholder="Service Location"
+              />
+              {% endif %}
+              <div class="text-center">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Edit
+              </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

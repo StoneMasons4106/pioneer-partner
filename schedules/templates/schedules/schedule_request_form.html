@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    {% if to_user.first_name and to_user.last_name %}
+    <h1>Request to Work With {{ to_user.first_name }} {{ to_user.last_name }}</h1>
+    {% else %}
+    <h1>Request to Work With {{ username }}</h1>
+    {% endif %}
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'userview' username %}">Userview</a>
+        </li>
+        <li class="breadcrumb-item active">Schedule Request Form</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section request-to-work-together">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3 mb-2">
+          <div class="card-body">
+            <form
+              class="row g-3 mt-1"
+              action="/schedule/request/{{ username }}/"
+              method="post"
+              id="request-to-work-together-form"
+            >
+              {% csrf_token %}
+              <input required name="day" form="request-to-work-together-form" type="date" class="form-control">
+              <input
+                required
+                type="time"
+                form="request-to-work-together-form"
+                name="start-time"
+                class="form-control"
+              />
+              <input
+                required
+                type="time"
+                form="request-to-work-together-form"
+                name="end-time"
+                class="form-control"
+              />
+              <textarea
+                form="request-to-work-together-form"
+                name="notes"
+                class="form-control"
+                placeholder="Write something..."
+                style="height: 100px"
+              ></textarea
+              >
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-question-lg"></i> Request
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

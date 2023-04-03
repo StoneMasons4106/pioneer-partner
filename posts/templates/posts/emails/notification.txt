@@ -1,0 +1,8 @@
+Hello {{ name }}!
+
+You have a new notification: {{ notification_type }}
+
+If you'd like to view the notification, please use the URL here: {{ notification_url }}
+
+Thank you for using Pioneer Partner!
+{{ my_hostname }}

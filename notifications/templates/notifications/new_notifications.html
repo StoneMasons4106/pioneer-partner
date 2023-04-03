@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+      <div class="row">
+        <div class="col-lg-4 col-6">
+            <h1>New Notifications</h1>
+        </div>
+        <div class="col-lg-4 col-6 text-end">
+          <a
+            href="{% url 'mark_all_read' %}"
+            class="btn btn-primary"
+            ><i class="bi bi-eye"></i> Mark All Read</a
+          >
+        </div>
+      </div>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item active">New Notifications</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- End Page Title -->
+
+
+    <section class="section dashboard">
+        <div class="row">
+          <!-- Left side columns -->
+          <div class="col-lg-8">
+            {% for notification in new_notifications %}
+            <div class="row">
+                <!-- Default Card -->
+                <div class="card mt-3 mb-2" style="background-color: #D8DBF5;">
+                    <div class="card-header" style="background-color: #D8DBF5;">
+                        {{ notification.get_type_display }} {{ notification.created | timesince }} ago
+                    </div>
+                    <div class="card-body mt-3">
+                    <p>{{ notification.info }}</p>
+                    <div class="text-center">
+                        <input class="notification-id" type="hidden" value="{{ notification.notification_id }}">
+                        <a href="{{ notification.url }}" class="btn btn-primary notification-button"><i class="bi bi-eye"></i> View {{ notification.get_type_display }}</a>
+                    </div>
+                    </div>
+                </div><!-- End Default Card -->
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+    </section>
+
+
+</main>
+
+{% endblock %}

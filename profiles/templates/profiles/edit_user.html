@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Edit User</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'userview' user_profile.user.username %}">Userview</a>
+        </li>
+        <li class="breadcrumb-item active">Edit User</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section edit-regular-day">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3 mb-2">
+          <div class="card-body">
+            <form
+              class="row g-3 mt-1"
+              action="/profile/{{ user_profile.user.username }}/edit/"
+              method="post"
+              id="edit-user-form"
+            >
+              {% csrf_token %}
+              <select required class="form-select" form="edit-user-form" name="congregation">
+                {% for congregation in congregations %}
+                {% if user_profile.congregation == congregation %}
+                <option value="{{ congregation.congregation_id }}" selected>{{ congregation.name }} ({{ congregation.number }})</option>
+                {% else %}
+                <option value="{{ congregation.congregation_id }}">{{ congregation.name }} ({{ congregation.number }})</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              <select required class="form-select" form="edit-user-form" name="service-group">
+                {% for group in service_groups %}
+                {% if user_profile.service_group == group %}
+                <option value="{{ group.service_group_id }}" selected>{{ group.name }} - {{ group.congregation.name }} ({{ group.congregation.number }})</option>
+                {% else %}
+                <option value="{{ group.service_group_id }}">{{ group.name }} - {{ group.congregation.name }} ({{ group.congregation.number }})</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

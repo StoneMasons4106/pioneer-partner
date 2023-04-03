@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>Service Meeting</h1>
+      </div>
+      {% for group in groups %}
+      {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'edit_service_meeting' service_meeting.id %}" class="btn btn-primary add-invite"><i class="bi bi-pencil"></i> Edit Service Meeting</a>
+        <a href="{% url 'delete_service_meeting' service_meeting.id %}" class="btn btn-danger add-invite"><i class="bi bi-trash"></i> Delete Service Meeting</a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'service_meetings' %}">Service Meetings</a>
+        </li>
+        <li class="breadcrumb-item active">Service Meeting</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section post">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3">
+          <div class="card-body mt-4">
+            <p><b>Day:</b> {{ service_meeting.get_day_display }}</p>
+            <p><b>Time:</b> {{ service_meeting.time }}</p>
+            {% if service_meeting.service_group %}
+            <p><b>Congregation Meeting?</b> No</p>
+            <p><b>Service Group:</b> {{ service_meeting.service_group }}</p>
+            {% else %}
+            <p><b>Congregation Meeting?</b> Yes</p>
+            <p><b>Service Group:</b> None</p>
+            {% endif %}
+            {% if service_meeting.service_location %}
+            <p><b>Location:</b> {{ service_meeting.service_location }}</p>
+            {% elif service_meeting.service_group %}
+            <p><b>Location:</b> {{ service_meeting.service_location }}</p>
+            {% else %}
+            <p><b>Location:</b> {{ service_meeting.congregation.address }}</p>
+            {% endif %}
+            <p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

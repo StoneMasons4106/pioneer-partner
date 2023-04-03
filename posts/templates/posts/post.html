@@ -1,0 +1,225 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Post</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Post</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section post">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3 mb-2">
+          {% if post.user.first_name and post.user.last_name %}
+          <div class="card-header">
+            <a
+              href="{% url 'userview' post.user.username %}"
+              class="post-user-link"
+              ><b>{{ post.user.first_name }} {{ post.user.last_name }}</b></a
+            >
+            @{{ post.user.username }} {{ post.created | timesince }} ago
+            {% if request.user == post.user %}
+              <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' post.post_id %}">
+                      <i class="bi bi-pencil"></i>
+                      <span>Edit Post</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' post.post_id %}">
+                      <i class="bi bi-trash"></i>
+                      <span>Delete Post</span>
+                    </a>
+                  </li>
+              </ul><!-- End Profile Dropdown Items -->
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="card-header">
+            <a
+              href="{% url 'userview' post.user.username %}"
+              class="post-user-link"
+              >@{{ post.user.username }}</a
+            >
+            {{ post.created | timesince }} ago
+            {% if request.user == post.user %}
+              <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' post.post_id %}">
+                      <i class="bi bi-pencil"></i>
+                      <span>Edit Post</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' post.post_id %}">
+                      <i class="bi bi-trash"></i>
+                      <span>Delete Post</span>
+                    </a>
+                  </li>
+              </ul><!-- End Profile Dropdown Items -->
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="card-body mt-3 post-content">{{ post.text_input }}</div>
+          <div class="card-footer">
+            <input
+              type="hidden"
+              id="post-id"
+              name="post-id"
+              value="{{ post.post_id }}"
+            />
+            <div class="row">
+              <div class="col-4 comment-column text-center">
+                <i class="bi bi-chat pointer comment-button"></i>
+                <span class="number-of-comments"
+                  >{{ post.number_of_comments }}</span
+                >
+              </div>
+              <div class="col-4 like-column text-center">
+                {% if request.user in post.is_liked %}
+                <i class="bi bi-heart-fill pointer like-button"></i>
+                <span class="number-of-likes">{{ post.number_of_likes }}</span>
+                {% else %}
+                <i class="bi bi-heart pointer like-button"></i>
+                <span class="number-of-likes">{{ post.number_of_likes }}</span>
+                {% endif %}
+              </div>
+              <div class="col-4 bookmark-column text-center">
+                {% if request.user in post.is_bookmarked %}
+                <i class="bi bi-bookmark-fill pointer bookmark-button"></i>
+                {% else %}
+                <i class="bi bi-bookmark pointer bookmark-button"></i>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Card with header and footer -->
+        {% for comment in comments %}
+        <!-- Card with header and footer -->
+        <div class="comment-card card mb-2">
+          {% if comment.user.first_name and comment.user.last_name %}
+          <div class="card-header">
+            <i class="bi bi-reply-fill"></i>
+            <a
+              href="{% url 'userview' post.user.username %}"
+              class="post-user-link"
+              ><b> {{ comment.user.first_name }} {{ comment.user.last_name }}</b></a
+            >
+            @{{ comment.user.username }} {{ comment.created | timesince }} ago
+            {% if request.user == comment.user %}
+              <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' comment.post_id %}">
+                      <i class="bi bi-pencil"></i>
+                      <span>Edit Post</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' comment.post_id %}">
+                      <i class="bi bi-trash"></i>
+                      <span>Delete Post</span>
+                    </a>
+                  </li>
+              </ul><!-- End Profile Dropdown Items -->
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="card-header">
+            <a
+              href="{% url 'userview' comment.user.username %}"
+              class="post-user-link"
+              >@{{ comment.user.username }}</a
+            >
+            {{ comment.created | timesince }} ago
+            {% if request.user == comment.user %}
+              <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_post' comment.post_id %}">
+                      <i class="bi bi-pencil"></i>
+                      <span>Edit Post</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_post' comment.post_id %}">
+                      <i class="bi bi-trash"></i>
+                      <span>Delete Post</span>
+                    </a>
+                  </li>
+              </ul><!-- End Profile Dropdown Items -->
+            {% endif %}
+          </div>
+          {% endif %}
+          <a href="{% url 'post' comment.post_id %}" class="pointer post-content">
+            <div class="card-body mt-3">
+                {{ comment.text_input }}
+            </div>
+        </a>
+          <div class="card-footer">
+            <input
+              type="hidden"
+              id="post-id"
+              name="post-id"
+              value="{{ comment.post_id }}"
+            />
+            <div class="row">
+              <div class="col-4 comment-column text-center">
+                <i class="bi bi-chat pointer comment-button"></i>
+                <span class="number-of-comments"
+                  >{{ comment.number_of_comments }}</span
+                >
+              </div>
+              <div class="col-4 like-column text-center">
+                {% if request.user in comment.is_liked %}
+                <i class="bi bi-heart-fill pointer like-button"></i>
+                <span class="number-of-likes">{{ comment.number_of_likes }}</span>
+                {% else %}
+                <i class="bi bi-heart pointer like-button"></i>
+                <span class="number-of-likes">{{ comment.number_of_likes }}</span>
+                {% endif %}
+              </div>
+              <div class="col-4 bookmark-column text-center">
+                {% if request.user in comment.is_bookmarked %}
+                <i class="bi bi-bookmark-fill pointer bookmark-button"></i>
+                {% else %}
+                <i class="bi bi-bookmark pointer bookmark-button"></i>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Card with header and footer -->
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+{% endblock %}

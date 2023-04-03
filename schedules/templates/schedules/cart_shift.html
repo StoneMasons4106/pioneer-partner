@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+        <h1>Cart Shift</h1>
+    </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'cart_shifts' %}">Cart Shifts</a>
+        </li>
+        <li class="breadcrumb-item active">Cart Shift</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section post">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3">
+          <div class="card-body mt-4">
+            <p><b>Day:</b> {{ shift.Schedule.date }}</p>
+            <p><b>Location:</b> {{ shift.Location.name }}</p>
+            <p><b>Time Range:</b> {{ shift.Schedule.start }} - {{ shift.Schedule.end }}</p>
+            {% if shift.Keyman.first_name %}
+            <p><b>Keyman:</b> {{ shift.Keyman.first_name }} {{ shift.Keyman.last_name }}</p>
+            {% else %}
+            <p><b>Keyman:</b> -</p>
+            {% endif %}
+            {% if shift.Keyman.phone %}
+            <p><b>Keyman Phone:</b> <a href="tel:{{ shift.Keyman.phone }}">{{ shift.Keyman.phone }}</a></p>
+            {% else %}
+            <p><b>Keyman Phone:</b> -</p>
+            {% endif %}
+            <p><b>Slots Filled:</b> {{ shift.ScheduledPublisher|length }}/{{ shift.Schedule.slots }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

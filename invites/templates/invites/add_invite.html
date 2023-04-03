@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>Add Invite</h1>
+      </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'congregation' %}">Congregation</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'invites' %}">Active Invites</a>
+        </li>
+        <li class="breadcrumb-item active">Add Invite</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section add-invite">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3 mb-2">
+          <div class="card-body">
+            <form
+              class="row g-3 mt-1"
+              action="/invites/add/{{ congregation_id }}/"
+              method="post"
+              id="add-invite-form"
+            >
+              {% csrf_token %}
+              <input
+                required
+                type="text"
+                form="add-invite-form"
+                name="name"
+                class="form-control"
+                placeholder="Name"
+              />
+              <input
+                required
+                type="email"
+                form="add-invite-form"
+                name="email"
+                class="form-control"
+                placeholder="Email"
+              />
+              <select required form="add-invite-form" name="service-group" class="form-select form-control" placeholder="Service Groups">
+                {% for group in service_groups %}
+                <option value="{{ group.id }}">{{ group.name }}</option>
+                {% endfor %}
+              </select>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-plus-circle"></i> Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>{{ congregation }}</h1>
+      </div>
+      {% for group in groups %}
+      {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'edit_congregation_info' %}" class="btn btn-primary add-invite"><i class="bi bi-pencil"></i> Edit Congregation Info</a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Congregation</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Users</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ number_of_users }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Sales Card -->
+
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card revenue-card">
+              <div class="card-body">
+                <h5 class="card-title">Address</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-arrow-right"></i>
+                  </div>
+                  <div class="ps-3">
+                    <a href="{{ maps_url }}" target="_blank"
+                      ><h6>View Map</h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Sales Card -->
+
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card customers-card">
+              <div class="card-body">
+                <h5 class="card-title">Number</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-hash"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ congregation.number }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Sales Card -->
+
+          <div class="col-12">
+            <div class="card overflow-auto">
+              <div class="card-body">
+                <h5 class="card-title">Congregation Users</h5>
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for profile in congregation_users %}
+                    <tr>
+                      <td>
+                        <a href="{% url 'userview' profile.user.username %}"
+                          >{{ profile.user.first_name }} {{ profile.user.last_name }}</a
+                        >
+                      </td>
+                      <td>{{ profile.user.email}}</td>
+                      <td>{{ profile.location }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% for group in groups %} {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4">
+        <div class="card info-card">
+          <div class="card-body">
+            <h5 class="card-title">Active Invitations</h5>
+            <div class="d-flex align-items-center">
+              <div class="card-icon invite-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-envelope-paper"></i>
+              </div>
+              <div class="ps-3">
+                <h6>{{ number_of_invites }}</h6>
+              </div>
+            </div>
+            <p class="card-text mt-3 text-center">
+              <a href="{% url 'invites' %}" class="btn btn-primary"
+                ><i class="bi bi-eye"></i> View Invitations</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="card info-card">
+          <div class="card-body">
+            <h5 class="card-title">Service Groups</h5>
+            <div class="d-flex align-items-center">
+              <div class="card-icon briefcase-icon rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-briefcase"></i>
+              </div>
+              <div class="ps-3">
+                <h6>{{ number_of_service_groups }}</h6>
+              </div>
+            </div>
+            <p class="card-text mt-3 text-center">
+              <a href="{% url 'service_groups' %}" class="btn btn-primary"
+                ><i class="bi bi-eye"></i> View Service Groups</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+  </section>
+</main>
+
+{% endblock %}

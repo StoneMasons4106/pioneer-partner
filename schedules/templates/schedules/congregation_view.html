@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>Congregation View</h1>
+      </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Congregation View</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <!-- Recent Sales -->
+          <div class="col-12">
+            <div class="card schedule-requests-card recent-sales overflow-auto">
+              <div class="card-body">
+                <h5 class="card-title">Congregation Days</h5>
+
+                <table class="table table-borderless datatable">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Day</th>
+                      <th scope="col">Availability</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in congregation_service_days %} 
+                    <tr>
+                      <td class="whos-out-name">
+                        <a href="{% url 'userview' item.user.username %}"
+                          >{{ item.user.first_name }} {{ item.user.last_name }}</a
+                        >
+                      </td>
+                      <td>{{ item.get_day_display }}</td>
+                      <td>{{ item.start_time }} - {{ item.end_time }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End Recent Sales -->
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

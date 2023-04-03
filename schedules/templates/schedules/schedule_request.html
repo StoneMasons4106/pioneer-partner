@@ -1,0 +1,114 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Schedule Request</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'schedule_requests' %}">Schedule Requests</a>
+        </li>
+        <li class="breadcrumb-item active">Schedule Request</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-8">
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+              <li class="nav-item">
+                <button
+                  class="nav-link active"
+                  data-bs-toggle="tab"
+                  data-bs-target="#request-details"
+                >
+                  Request Details
+                </button>
+              </li>
+
+              <li class="nav-item">
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#respond"
+                >
+                  Respond
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content pt-2">
+              <div class="tab-pane fade show active" id="request-details">
+                <div class="row mt-3">
+                  <div class="col-lg-3 col-md-4 label">Requesting User:</div>
+                  <div class="col-lg-9 col-md-8">
+                    <a href="{% url 'userview' schedule_request.requesting_user %}">
+                      {{ schedule_request.requesting_user }}
+                    </a>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-3 col-md-4 label">To User:</div>
+                  <div class="col-lg-9 col-md-8">
+                    {{ schedule_request.to_user }}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-3 col-md-4 label">Date:</div>
+                  <div class="col-lg-9 col-md-8">
+                    {{ schedule_request.day }}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-3 col-md-4 label">Start Time:</div>
+                  <div class="col-lg-9 col-md-8">
+                    {{ schedule_request.start_time }}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-3 col-md-4 label">End Time:</div>
+                  <div class="col-lg-9 col-md-8">
+                    {{ schedule_request.end_time }}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-3 col-md-4 label">Notes:</div>
+                  <div class="col-lg-9 col-md-8">
+                    {{ schedule_request.notes }}
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade show" id="respond">
+                <form action="#" method="POST">
+                  {% csrf_token %}
+                  {% for field in form %}
+                  <div class="row mt-3">
+                    <div class="col-lg-9 col-md-8">
+                      {{ field }}
+                    </div>
+                  </div>
+                  {% endfor %}
+                  <div class="row mt-3 text-center">
+                    <div class="col-lg-9 col-md-8">
+                      <button type="submit" class="btn btn-primary">Respond <i class="bi bi-arrow-right-circle"></i></button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

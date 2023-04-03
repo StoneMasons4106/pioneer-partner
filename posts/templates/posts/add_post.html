@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>New Post</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">New Post</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section edit-post">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3 mb-2">
+          <div class="card-body">
+            <form
+              class="row g-3 mt-1"
+              action="/posts/add/"
+              method="post"
+              id="add-post-form"
+            >
+              {% csrf_token %}
+              <textarea
+                required
+                form="add-post-form"
+                name="post-text"
+                class="form-control"
+                placeholder="Write something..."
+                style="height: 100px"
+              ></textarea
+              >
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-pencil-square"></i> Post
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

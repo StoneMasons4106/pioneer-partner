@@ -1,0 +1,11 @@
+Hello {{name}}!
+
+You've been invited to join Pioneer Partner by your local Congregation Admin!
+
+Please use this link to signup with the following invite code:
+
+Invite Link: {{my_hostname}}accounts/signup/
+Invite Code: {{code}}
+
+Thank you for using Pioneer Partner!
+{{my_hostname}}

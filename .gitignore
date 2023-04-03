@@ -1,0 +1,6 @@
+env.py
+*.sqlite3
+__pycache__/
+*.pyc
+Nice-Admin/
+commands.txt

@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Schedule Requests</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Schedule Requests</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <!-- Recent Sales -->
+          <div class="col-12">
+            <div class="card schedule-requests-card recent-sales overflow-auto">
+              <div class="card-body">
+                <h5 class="card-title">Requests</h5>
+
+                <table class="table table-borderless datatable">
+                  <thead>
+                    <tr>
+                      <th scope="col">From</th>
+                      <th scope="col">To</th>
+                      <th scope="col">Day</th>
+                      <th scope="col">Time Range</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for request in schedule_request_incoming %}
+                    <tr>
+                      <td>
+                        <a
+                          href="{% url 'schedule_request' request.request_id %}"
+                          >{{ request.requesting_user }}</a
+                        >
+                      </td>
+                      <td>{{ request.to_user }}</td>
+                      <td>{{ request.day }}</td>
+                      <td>{{ request.start_time }} - {{ request.end_time }}</td>
+                      <td>
+                        <span class="badge bg-warning">Pending Approval</span>
+                      </td>
+                    </tr>
+                    {% endfor %} 
+                    {% for request in schedule_request_outgoing %}
+                    <tr>
+                      <td>{{ request.requesting_user }}</td>
+                      <td>{{ request.to_user }}</td>
+                      <td>{{ request.day }}</td>
+                      <td>{{ request.start_time }} - {{ request.end_time }}</td>
+                      <td><span class="badge bg-primary">Sent</span></td>
+                    </tr>
+                    {% endfor %} 
+                    {% for request in confirmed %}
+                    <tr>
+                      <td>{{ request.requesting_user }}</td>
+                      <td>{{ request.to_user }}</td>
+                      <td>{{ request.day }}</td>
+                      <td>{{ request.start_time }} - {{ request.end_time }}</td>
+                      <td><span class="badge bg-success">Approved</span></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End Recent Sales -->
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>{{ service_group.name }}</h1>
+      </div>
+      {% for group in groups %} {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'edit_service_group_info' service_group.service_group_id %}" class="btn btn-primary add-invite"
+          ><i class="bi bi-pencil"></i> Edit Service Group Info</a
+        >
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        {% if service_group == profile.service_group %}
+        <li class="breadcrumb-item active">My Service Group</li>
+        {% else %}
+        <li class="breadcrumb-item active">Service Group</li>
+        {% endif %}
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Members</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ service_group_members|length }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Sales Card -->
+
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card revenue-card">
+              <div class="card-body">
+                <h5 class="card-title">Service Location</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-arrow-right"></i>
+                  </div>
+                  <div class="ps-3">
+                    <a href="{{ maps_url }}" target="_blank"
+                      ><h6>View Map</h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Sales Card -->
+
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card customers-card">
+              <div class="card-body">
+                <h5 class="card-title">Congregation</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-house"></i>
+                  </div>
+                  <div class="ps-3">
+                    <a href="{% url 'congregation' %}"
+                      ><h6>{{ service_group.congregation.name }}</h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Sales Card -->
+
+          <div class="col-12">
+            <div class="card overflow-auto">
+              <div class="card-body">
+                <h5 class="card-title">Service Group Members</h5>
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for profile in service_group_members %}
+                    <tr>
+                      <td>
+                        <a href="{% url 'userview' profile.user.username %}"
+                          >{{ profile.user.first_name }} {{ profile.user.last_name }}</a
+                        >
+                      </td>
+                      <td>{{ profile.user.email}}</td>
+                      <td>{{ profile.location }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Right side columns -->
+      <div class="col-lg-4">
+        <div class="col">
+          <div class="card info-card customers-card">
+            <div class="card-body">
+              <h5 class="card-title">Group Service Meetings <span>| Today</span></h5>
+              <div class="d-flex align-items-center">
+                <div class="card-icon briefcase-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-briefcase"></i></div>
+                <div class="ps-3">
+                  <h6>{{ group_service_meetings }}</h6>
+                </div>
+              </div>
+              <p class="card-text mt-3 text-center">
+                <a href="{% url 'group_service_meetings' service_group.id %}" class="btn btn-primary"><i class="bi bi-eye"></i> View Service Meetings</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Right side columns -->
+    </div>
+  </section>
+</main>
+
+{% endblock %}

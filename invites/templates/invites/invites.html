@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+
+<main id="main" class="main">
+    <div class="pagetitle">
+      <div class="row">
+        <div class="col-lg-4 col-6">
+            <h1>Active Invites</h1>
+        </div>
+        <div class="col-lg-4 col-6 text-end">
+            <a href="{% url 'add_invite' profile.congregation.congregation_id %}" class="btn btn-primary add-invite"><i class="bi bi-plus-circle"></i> Add Invite</a>
+        </div>
+      </div>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'congregation' %}">Congregation</a>
+          </li>
+          <li class="breadcrumb-item active">Active Invites</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+          <!-- Left side columns -->
+          <div class="col-lg-8">
+            {% for invite in invites %}
+            <div class="row">
+                <!-- Sales Card -->
+                <div class="col">
+                    <div class="card info-card invite-card">
+                    <div class="card-body invite-card-body">
+                        <div class="d-flex align-items-center">
+                        <div
+                            class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                        >
+                        <i class="bi bi-link-45deg"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6>{{ invite.name }}</h6>
+                        </div>
+                        <form class="delete-invite-form" action="{% url 'delete_invite' invite.code %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-sm delete-invite-button" type="submit"><i class="bi bi-trash"></i></button>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- End Sales Card -->
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+    </section>
+
+</main>
+
+{% endblock %}

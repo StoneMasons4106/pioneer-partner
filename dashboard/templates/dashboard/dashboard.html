@@ -1,0 +1,320 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <div class="col-12">
+            {% for post in posts %}
+            <!-- Card with header and footer -->
+            <div class="card mt-3 overflow-auto">
+              {% if post.user.first_name and user.last_name %}
+              <div class="card-header">
+                <a
+                  href="{% url 'userview' post.user.username %}"
+                  class="post-user-link"
+                  ><b
+                    >{{ post.user.first_name }} {{ post.user.last_name }}</b
+                  ></a
+                >
+                @{{ post.user.username }} {{ post.created | timesince }} ago 
+                {% if request.user == post.user %}
+                <span class="post-menu pointer" data-bs-toggle="dropdown"
+                  ><i class="bi bi-three-dots"></i
+                ></span>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="{% url 'edit_post' post.post_id %}"
+                    >
+                      <i class="bi bi-pencil"></i>
+                      <span>Edit Post</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="{% url 'delete_post' post.post_id %}"
+                    >
+                      <i class="bi bi-trash"></i>
+                      <span>Delete Post</span>
+                    </a>
+                  </li>
+                </ul>
+                <!-- End Profile Dropdown Items -->
+              {% endif %}
+              </div>
+              {% else %}
+              <div class="card-header">
+                <a
+                  href="{% url 'userview' post.user.username %}"
+                  class="post-user-link"
+                  >@{{ post.user.username }}</a
+                >
+                {{ post.created | timesince }} ago 
+                {% if request.user == post.user %}
+                <span class="post-menu pointer" data-bs-toggle="dropdown"
+                  ><i class="bi bi-three-dots"></i
+                ></span>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="{% url 'edit_post' post.post_id %}"
+                    >
+                      <i class="bi bi-pencil"></i>
+                      <span>Edit Post</span>
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item d-flex align-items-center"
+                      href="{% url 'delete_post' post.post_id %}"
+                    >
+                      <i class="bi bi-trash"></i>
+                      <span>Delete Post</span>
+                    </a>
+                  </li>
+                </ul>
+                <!-- End Profile Dropdown Items -->
+                {% endif %}
+              </div>
+              {% endif %}
+              <a
+                href="{% url 'post' post.post_id %}"
+                class="pointer post-content"
+              >
+                <div class="card-body mt-3">{{ post.text_input }}</div>
+              </a>
+              <div class="card-footer">
+                <input
+                  type="hidden"
+                  id="post-id"
+                  name="post-id"
+                  value="{{ post.post_id }}"
+                />
+                <div class="row">
+                  <div class="col-4 text-center">
+                    <i class="bi bi-chat pointer comment-button"></i>
+                    <span class="number-of-comments"
+                      >{{ post.number_of_comments }}</span
+                    >
+                  </div>
+                  <div class="col-4 like-column text-center">
+                    {% if request.user in post.is_liked %}
+                    <i class="bi bi-heart-fill pointer like-button"></i>
+                    <span class="number-of-likes"
+                      >{{ post.number_of_likes }}</span
+                    >
+                    {% else %}
+                    <i class="bi bi-heart pointer like-button"></i>
+                    <span class="number-of-likes"
+                      >{{ post.number_of_likes }}</span
+                    >
+                    {% endif %}
+                  </div>
+                  <div class="col-4 text-center">
+                    {% if request.user in post.is_bookmarked %}
+                    <i class="bi bi-bookmark-fill pointer bookmark-button"></i>
+                    {% else %}
+                    <i class="bi bi-bookmark pointer bookmark-button"></i>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Card with header and footer -->
+            {% endfor %}
+          </div>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">My Weekly Hour Breakdown</h5>
+                <canvas id="barChart" style="max-height: 400px; display: block; box-sizing: border-box; height: 155px; width: 310px;" width="930" height="465"></canvas> 
+                <script>document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#barChart'), {
+                    type: 'bar',
+                    data: {
+                      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                      datasets: [{
+                        label: 'Hours',
+                        data: {{ my_hour_data }},
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                });</script> 
+              </div>
+            </div>
+          </div>
+          <!-- Reports -->
+          <div class="col-12">
+            <div class="card">
+
+              <div class="card-body">
+                <h5 class="card-title">Congregation Scheduled Hours <span>/ Weekly</span></h5>
+
+                <!-- Line Chart -->
+                <div id="reportsChart"></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    new ApexCharts(document.querySelector("#reportsChart"), {
+                      series: [{
+                        name: 'Hours',
+                        data: {{ congregation_hour_data}},
+                      }],
+                      chart: {
+                        height: 350,
+                        type: 'area',
+                        toolbar: {
+                          show: false
+                        },
+                      },
+                      markers: {
+                        size: 4
+                      },
+                      colors: ['#4154f1'],
+                      fill: {
+                        type: "gradient",
+                        gradient: {
+                          shadeIntensity: 1,
+                          opacityFrom: 0.3,
+                          opacityTo: 0.4,
+                          stops: [0, 90, 100]
+                        }
+                      },
+                      dataLabels: {
+                        enabled: false
+                      },
+                      stroke: {
+                        curve: 'smooth',
+                        width: 2
+                      },
+                      xaxis: {
+                        type: 'day',
+                        categories: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                      },
+                    }).render();
+                  });
+                </script>
+                <!-- End Line Chart -->
+
+              </div>
+
+            </div>
+          </div><!-- End Reports -->
+        </div>
+      </div>
+      <!-- End Left side columns -->
+
+      <!-- Right side columns -->
+      <div class="col-lg-4">
+        <!-- Recent Activity -->
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Weather <span>| Now</span></h5>
+            <div class="card-icon rounded-circle d-flex" style="width: 100%;">
+            {% if current_weather %}
+            <img src="{{ current_weather.current.condition.icon }}" alt="{{ current_weather.current.condition.text }}">
+            <h5 class="mt-3" style="margin-left: 5px;">{{ current_weather.current.temp_f }}&#176F</h5>
+            </div>
+            <p><b>Current Conditions:</b> {{ current_weather.current.condition.text }}</p>
+            <p><b>Wind:</b> {{ current_weather.current.wind_mph }} mph / {{ current_weather.current.gust_mph }} mph gusts</p>
+            <p><b>Feels Like:</b> {{ current_weather.current.feelslike_f }}&#176F </p>
+            {% else %}
+            <i class="bi bi-x-circle-fill"></i>
+            <h5 class="mt-1" style="margin-left: 10px">No weather data available</h5>
+            </div>
+            <p>To get weather data, please update your profile to contain a local city or township and state.</p>
+            {% endif %}
+          </div>
+        </div>
+        <!-- End Recent Activity -->
+
+        <div class="col">
+          <div class="card info-card customers-card">
+            <div class="card-body">
+              <h5 class="card-title">Who's Out <span>| Today</span></h5>
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-people"></i></div>
+                <div class="ps-3">
+                  <h6>{{ regular_days|length }}</h6>
+                </div>
+              </div>
+              <p class="card-text mt-3 text-center">
+                <a href="{% url 'congregation_view' %}" class="btn btn-primary"><i class="bi bi-eye"></i> View Congregation Schedule</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card info-card customers-card">
+            <div class="card-body">
+              <h5 class="card-title">Congregation Service Meetings <span>| Today</span></h5>
+              <div class="d-flex align-items-center">
+                <div class="card-icon briefcase-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-briefcase"></i></div>
+                <div class="ps-3">
+                  <h6>{{ congregation_service_meetings }}</h6>
+                </div>
+              </div>
+              <p class="card-text mt-3 text-center">
+                <a href="{% url 'service_meetings' %}" class="btn btn-primary"><i class="bi bi-eye"></i> View Service Meetings</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Right side columns -->
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+{% endblock %}
