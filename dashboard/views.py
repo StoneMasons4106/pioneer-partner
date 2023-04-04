@@ -6,7 +6,6 @@ from congregations.models import ServiceMeeting
 from django.db.models import Q
 from schedules.models import RegularServiceDay
 from datetime import datetime, date, timedelta
-from django.views.generic.base import RedirectView
 import requests
 import os
 
@@ -66,7 +65,12 @@ def dashboard(request):
         except:
             current_weather = {}
     else:
-        current_weather = {}
+        try:
+            weather_api_key = os.environ.get('WEATHER_API_KEY')
+            ipapi_request = requests.get(f'https://ipapi.co/{request.META.get("REMOTE_ADDR")}/json/').json()
+            current_weather = requests.get(f'http://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={ipapi_request.city}, {ipapi_request.region_code}').json()
+        except:
+            current_weather = {}
 
     context = {
         'profile': profile,
