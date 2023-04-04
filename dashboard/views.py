@@ -15,6 +15,8 @@ import os
 def dashboard(request):
     '''A view to return the main dashboard'''
 
+    print(request.META)
+
     profile = get_object_or_404(UserProfile, user=request.user)
     posts = Post.objects.filter(Q(comment__isnull=True), congregation=profile.congregation).order_by("-created")[:20]
     
@@ -53,7 +55,7 @@ def dashboard(request):
             congregation_hour_data.append(0)    
         
     
-    filtered_regular_days = RegularServiceDay.objects.filter(day=datetime.today().weekday()+1, congregation=profile.congregation).distinct()
+    filtered_regular_days = RegularServiceDay.objects.filter(day=datetime.today().weekday()+1, congregation=profile.congregation).distinct("user")
 
     today = datetime.today().weekday()
     congregation_service_meetings = ServiceMeeting.objects.filter(Q(service_group__isnull=True), congregation=profile.congregation, day=today+1)
@@ -67,10 +69,9 @@ def dashboard(request):
     else:
         try:
             weather_api_key = os.environ.get('WEATHER_API_KEY')
+            print(request.META)
             ipapi_request = requests.get(f'https://ipapi.co/{request.META.get("REMOTE_ADDR")}/json/').json()
-            print(ipapi_request)
             current_weather = requests.get(f'http://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={ipapi_request.city}, {ipapi_request.region_code}').json()
-            print(current_weather)
         except:
             current_weather = {}
 
