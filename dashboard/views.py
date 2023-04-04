@@ -67,10 +67,9 @@ def dashboard(request):
         except:
             current_weather = {}
     else:
+        weather_api_key = os.environ.get('WEATHER_API_KEY')
         try:
-            weather_api_key = os.environ.get('WEATHER_API_KEY')
-            print(request.META)
-            ipapi_request = requests.get(f'https://ipapi.co/{request.META.get("REMOTE_ADDR")}/json/').json()
+            ipapi_request = requests.get(f'https://ipapi.co/{request.META.get("HTTP_CF_CONNECTING_IP")}/json/').json()
             current_weather = requests.get(f'http://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={ipapi_request.city}, {ipapi_request.region_code}').json()
         except:
             current_weather = {}
