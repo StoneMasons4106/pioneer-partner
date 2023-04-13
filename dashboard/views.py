@@ -53,7 +53,12 @@ def dashboard(request):
             congregation_hour_data.append(0)    
         
     
-    filtered_regular_days = RegularServiceDay.objects.filter(day=datetime.today().weekday()+1, congregation=profile.congregation).distinct("user")
+    filter_regular_days = RegularServiceDay.objects.filter(day=datetime.today().weekday()+1, congregation=profile.congregation).distinct("user")
+    filtered_regular_days = []
+    for day in filter_regular_days:
+        if day.user != request.user:
+            filtered_regular_days.append(day)
+
 
     today = datetime.today().weekday()
     congregation_service_meetings = ServiceMeeting.objects.filter(Q(service_group__isnull=True), congregation=profile.congregation, day=today+1)
@@ -76,7 +81,7 @@ def dashboard(request):
         'posts': posts,
         'my_hour_data': my_hour_data,
         'congregation_hour_data': congregation_hour_data,
-        'regular_days': filtered_regular_days,
+        'regular_days': len(filtered_regular_days),
         'current_weather': current_weather,
         'congregation_service_meetings': len(congregation_service_meetings),
         'title': 'Pioneer Partner - Dashboard',
