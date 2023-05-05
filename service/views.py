@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from profiles.models import UserProfile
 import os
 import requests
+from .models import Call
 
 # Create your views here.
 
@@ -48,3 +49,18 @@ def cart_shift(request, shift_id):
     }
 
     return render(request, 'service/cart_shift.html', context)
+
+
+@login_required
+def calls(request):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    calls = Call.objects.filter(user=request.user)
+
+    context = {
+        'profile': profile,
+        'calls': calls,
+        'title': 'Pioneer Partner - Calls',
+    }
+
+    return render(request, 'service/calls.html', context)

@@ -8,6 +8,7 @@ from address.forms import AddressWidget
 class CallAdmin(admin.ModelAdmin):
     list_display = (
         'name',
+        'call_id',
         'user',
     )
 
