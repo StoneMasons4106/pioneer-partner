@@ -15,7 +15,7 @@
         {% if group.name == "Congregation Admin" %}
         <a
           href="{% url 'edit_user' user.username %}"
-          class="btn btn-primary"
+          class="btn btn-primary userview-admin-buttons"
           ><i class="bi bi-pencil"></i> Edit User Info</a
         >
         {% else %}
@@ -24,7 +24,7 @@
         {% endfor %}
         <a
           href="{% url 'request_to_work_together' user.username %}"
-          class="btn btn-success"
+          class="btn btn-success userview-admin-buttons"
           ><i class="bi bi-question-lg"></i> Request to Work Together</a
         >
       </div>
