@@ -13,8 +13,10 @@ class CallAdmin(admin.ModelAdmin):
     )
 
     fields = (
-        'name',
         'user',
+        'name',
+        'gender',
+        'age',
         'address',
         'contact_date',
         'notes',

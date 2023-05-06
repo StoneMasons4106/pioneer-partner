@@ -10,7 +10,6 @@ from .forms import ScheduleRequestForm
 import os
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-import requests
 
 
 # Create your views here.

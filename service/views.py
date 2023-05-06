@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from profiles.models import UserProfile
 import os
 import requests
+from django.contrib import messages
 from .models import Call
 
 # Create your views here.
@@ -64,3 +65,16 @@ def calls(request):
     }
 
     return render(request, 'service/calls.html', context)
+
+
+@login_required
+def delete_call(request, call_id):
+
+    if len(str(call_id)) != 16:
+        call_id = str(call_id).zfill(16)
+    
+    call = get_object_or_404(Call, call_id=call_id)
+    call.delete()
+    messages.success(request, 'Call has been successfully been deleted.')
+
+    return redirect('calls')

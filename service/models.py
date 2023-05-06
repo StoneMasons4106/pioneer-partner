@@ -7,10 +7,16 @@ import string
 # Create your models here.
 
 class Call(models.Model):
+    GENDERS = [
+        ('1', 'Male'),
+        ('2', 'Female'),
+    ]
 
     call_id = models.CharField(max_length=16, unique=True)
     name = models.CharField(max_length=254)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gender = models.CharField(max_length=10, choices=GENDERS)
+    age = models.IntegerField(null=True, blank=True)
     address = AddressField(null=True, blank=True)
     contact_date = models.DateTimeField()
     notes = models.TextField(null=True, blank=True, max_length=3000)
