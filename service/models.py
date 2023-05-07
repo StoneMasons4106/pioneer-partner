@@ -18,7 +18,7 @@ class Call(models.Model):
     gender = models.CharField(max_length=10, choices=GENDERS)
     age = models.IntegerField(null=True, blank=True)
     address = AddressField(null=True, blank=True)
-    contact_date = models.DateTimeField()
+    contact_date = models.DateField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True, max_length=3000)
 
     def _generate_call_id(self):

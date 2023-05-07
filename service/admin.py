@@ -10,6 +10,7 @@ class CallAdmin(admin.ModelAdmin):
         'name',
         'call_id',
         'user',
+        'contact_date',
     )
 
     fields = (
@@ -18,7 +19,6 @@ class CallAdmin(admin.ModelAdmin):
         'gender',
         'age',
         'address',
-        'contact_date',
         'notes',
     )
 
