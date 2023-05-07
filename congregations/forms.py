@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from invites.models import Invite
 from profiles.models import UserProfile
 from django.forms import ValidationError
-from .models import Congregation, ServiceGroup, ServiceMeeting
+from .models import Congregation, ServiceGroup
 
 class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='First Name')

@@ -5,6 +5,7 @@ import os
 import requests
 from django.contrib import messages
 from .models import Call
+from .forms import AddCall
 
 # Create your views here.
 
@@ -65,6 +66,34 @@ def calls(request):
     }
 
     return render(request, 'service/calls.html', context)
+
+
+@login_required
+def add_call(request):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == "POST":
+        form = AddCall(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            messages.success(request, 'Call added successfully.')
+            return redirect('calls')
+        else:
+            messages.error(request, 'Request failed. Please ensure the form is valid.')
+    else:
+        form = AddCall()
+
+    context = {
+        'profile': profile,
+        'page': 'Edit Congregation',
+        'form': form,
+        'title': 'Pioneer Partner - Add Call',
+    }
+
+    return render(request, 'service/add_call.html', context)
 
 
 @login_required
