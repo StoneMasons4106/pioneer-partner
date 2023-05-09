@@ -15,7 +15,7 @@ class Call(models.Model):
     call_id = models.CharField(max_length=16, unique=True)
     name = models.CharField(max_length=254)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=10, choices=GENDERS)
+    gender = models.CharField(max_length=10, choices=GENDERS, default='1')
     age = models.IntegerField(null=True, blank=True)
     address = AddressField(null=True, blank=True)
     contact_date = models.DateField(auto_now_add=True)

@@ -4,7 +4,7 @@ from profiles.models import UserProfile
 import os
 import requests
 from django.contrib import messages
-from .models import Call
+from .models import Call, ReturnVisit
 from .forms import AddCall
 
 # Create your views here.
@@ -66,6 +66,35 @@ def calls(request):
     }
 
     return render(request, 'service/calls.html', context)
+
+
+@login_required
+def call(request, call_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    call = get_object_or_404(Call, call_id=call_id)
+    return_visits = ReturnVisit.objects.filter(call=call).order_by("-contact_date")
+
+    if request.method == 'POST':
+        form = AddCall(request.POST, instance=call)
+        if form.is_valid():
+            messages.success(request, 'Call updated successfully.')
+            form.save()
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = AddCall(instance=call)
+
+    context = {
+        'profile': profile,
+        'call': call,
+        'form': form,
+        'return_visits': return_visits,
+        'title': 'Pioneer Partner - Call',
+        'page': 'Edit Congregation',
+    }
+
+    return render(request, 'service/call.html', context)
 
 
 @login_required

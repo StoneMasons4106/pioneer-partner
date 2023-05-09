@@ -35,10 +35,14 @@
                     <div
                         class="card-icon rounded-circle d-flex align-items-center justify-content-center"
                     >
-                    <i class="bi bi-person-fill"></i>
+                    {% if call.gender == "1" %}
+                    <i class="bi bi-person-fill" style="color: blue"></i>
+                    {% else %}
+                    <i class="bi bi-person-fill" style="color: pink"></i>
+                    {% endif %}
                     </div>
                     <div class="ps-3">
-                        <h6><a href="#" class="call-name">{{ call.name }}</a></h6>
+                        <h6><a href="{% url 'call' call.call_id %}" class="call-name">{{ call.name }}</a></h6>
                     </div>
                     <form class="delete-regular-day-form" action="{% url 'delete_call' call.call_id %}" method="POST">
                         {% csrf_token %}
