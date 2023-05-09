@@ -305,10 +305,12 @@
   <script src="{% static 'js/markNotificationRead.js' %}"></script>
   <script>
     $('.call-loader').on('click', function() {
+      $('.main').hide()
       $('.loader-container').show();
     });
     $(window).on('load', function () {
       $('.loader-container').hide();
+      $('.main').show();
     });
   </script>
 

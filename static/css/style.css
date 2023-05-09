@@ -1,3 +1,7 @@
+.main {
+    display: none;
+}
+
 .loader-container {
     display: flex;
     width: 100vw;
