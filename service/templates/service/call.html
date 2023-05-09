@@ -126,6 +126,26 @@
                 <div class="card mt-3">
                   <div class="card-header">
                     {{ visit.contact_date }}
+                    {% if request.user == call.user %}
+                      <span class="post-menu pointer" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></span>
+                      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                          <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                              <i class="bi bi-pencil"></i>
+                              <span>Edit Return Visit</span>
+                            </a>
+                          </li>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{% url 'delete_return_visit' call.call_id visit.id %}">
+                              <i class="bi bi-trash"></i>
+                              <span>Delete Return Visit</span>
+                            </a>
+                          </li>
+                      </ul><!-- End Profile Dropdown Items -->
+                    {% endif %}
                   </div>
                   <div class="card-body mt-3">{{ visit.notes }}</div>
                   </a>

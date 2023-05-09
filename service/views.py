@@ -155,6 +155,16 @@ def add_return_visit(request, call_id):
 
 
 @login_required
+def delete_return_visit(request, call_id, return_visit_id):
+    
+    rv = get_object_or_404(ReturnVisit, pk=return_visit_id)
+    rv.delete()
+    messages.success(request, 'Return visit has been successfully been deleted.')
+
+    return redirect('call', call_id=call_id)
+
+
+@login_required
 def delete_call(request, call_id):
 
     if len(str(call_id)) != 16:
