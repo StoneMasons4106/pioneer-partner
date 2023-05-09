@@ -65,7 +65,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="{% url 'dashboard' %}" class="logo d-flex align-items-center">
+      <a href="{% url 'dashboard' %}" class="logo d-flex align-items-center call-loader">
         <i class="bi bi-people-fill"></i>
         <span class="d-none d-lg-block">Pioneer Partner</span>
       </a>
@@ -134,7 +134,7 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'add_post' %}">
+        <a class="nav-link collapsed call-loader" href="{% url 'add_post' %}">
           <i class="bi bi-pencil-square"></i>
           <span>Post</span>
         </a>
@@ -147,17 +147,17 @@
         </a>
         <ul id="congregation-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="{% url 'congregation' %}">
+            <a class="call-loader" href="{% url 'congregation' %}">
               <i class="bi bi-circle"></i><span>Congregation View</span>
             </a>
           </li>
           <li>
-            <a href="{% url 'service_meetings' %}">
+            <a class="call-loader" href="{% url 'service_meetings' %}">
               <i class="bi bi-circle"></i><span>Service Meetings</span>
             </a>
           </li>
           <li>
-            <a href="{% url 'service_group' profile.service_group.service_group_id %}">
+            <a class="call-loader" href="{% url 'service_group' profile.service_group.service_group_id %}">
               <i class="bi bi-circle"></i><span>My Service Group</span>
             </a>
           </li>
@@ -171,22 +171,22 @@
         </a>
         <ul id="schedule-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="{% url 'regular_days' %}">
+            <a class="call-loader" href="{% url 'regular_days' %}">
               <i class="bi bi-circle"></i><span>Regular Days</span>
             </a>
           </li>
           <li>
-            <a href="{% url 'whos_out_when_im_out' %}">
+            <a class="call-loader" href="{% url 'whos_out_when_im_out' %}">
               <i class="bi bi-circle"></i><span>Who's Out When I'm Out?</span>
             </a>
           </li>
           <li>
-            <a href="{% url 'congregation_view' %}">
+            <a class="call-loader" href="{% url 'congregation_view' %}">
               <i class="bi bi-circle"></i><span>Congregation View</span>
             </a>
           </li>
           <li>
-            <a href="{% url 'schedule_requests' %}">
+            <a class="call-loader" href="{% url 'schedule_requests' %}">
               <i class="bi bi-circle"></i><span>Schedule Requests</span>
             </a>
           </li>
@@ -200,17 +200,17 @@
         </a>
         <ul id="service-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li>
-            <a href="{% url 'calls' %}">
+            <a class="call-loader" href="{% url 'calls' %}">
               <i class="bi bi-circle"></i><span>Calls</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a class="call-loader" href="#">
               <i class="bi bi-circle"></i><span>Territories</span>
             </a>
           </li>
           <li>
-            <a href="{% url 'cart_shifts' %}">
+            <a class="call-loader" href="{% url 'cart_shifts' %}">
               <i class="bi bi-circle"></i><span>Cart Shifts</span>
             </a>
           </li>
@@ -218,14 +218,14 @@
       </li><!-- End Register Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'profile' %}">
+        <a class="nav-link collapsed call-loader" href="{% url 'profile' %}">
           <i class="bi bi-person"></i>
           <span>{{ request.user.username }}</span>
         </a>
       </li><!-- End Profile Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'bug' %}">
+        <a class="nav-link collapsed call-loader" href="{% url 'bug' %}">
           <i class="bi bi-bug"></i>
           <span>Report a Bug</span>
         </a>
@@ -304,9 +304,12 @@
   <script src="{% static 'js/bookmark.js' %}"></script>
   <script src="{% static 'js/markNotificationRead.js' %}"></script>
   <script>
+    $('.call-loader').on('click', function() {
+      $('.loader-container').show();
+    });
     $(window).on('load', function () {
       $('.loader-container').hide();
-    }) 
+    });
   </script>
 
 </body>
