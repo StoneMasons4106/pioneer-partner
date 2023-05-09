@@ -1,6 +1,6 @@
 from django import forms
 from address.forms import AddressField
-from .models import Call
+from .models import Call, ReturnVisit
 from .widgets import NumberInput
 
 class AddCall(forms.ModelForm):
@@ -31,3 +31,24 @@ class AddCall(forms.ModelForm):
                 self.fields[field].widget.attrs['class'] = 'form-control'
             else:
                 self.fields[field].widget.attrs['class'] = 'address form-control'
+
+
+class AddReturnVisit(forms.ModelForm):
+    class Meta:
+        model = ReturnVisit
+        exclude = ('call', 'contact_date',)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Add placeholders and classes, remove auto-generated
+        labels and set autofocus on first field
+        """
+        super().__init__(*args, **kwargs)
+        placeholders = {
+            'notes': 'Notes',
+        }
+
+        for field in self.fields:
+            placeholder = placeholders[field]
+            self.fields[field].widget.attrs['placeholder'] = placeholder
+            self.fields[field].widget.attrs['class'] = 'form-control'

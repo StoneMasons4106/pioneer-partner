@@ -8,8 +8,13 @@
       </div>
       <div class="col-lg-4 col-6 text-end">
         <a
+          href="{% url 'add_return_visit' call.call_id %}"
+          class="btn btn-primary userview-admin-buttons"
+          ><i class="bi bi-plus-circle"></i> Add Return Visit</a
+        >
+        <a
           href="#"
-          class="btn btn-success"
+          class="btn btn-success userview-admin-buttons"
           ><i class="bi bi-arrow-left-right"></i> Transfer Call</a
         >
       </div>

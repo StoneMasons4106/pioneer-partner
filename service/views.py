@@ -5,7 +5,7 @@ import os
 import requests
 from django.contrib import messages
 from .models import Call, ReturnVisit
-from .forms import AddCall
+from .forms import AddCall, AddReturnVisit
 
 # Create your views here.
 
@@ -123,6 +123,35 @@ def add_call(request):
     }
 
     return render(request, 'service/add_call.html', context)
+
+
+@login_required
+def add_return_visit(request, call_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    call = get_object_or_404(Call, call_id=call_id)
+
+    if request.method == "POST":
+        form = AddReturnVisit(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.call = get_object_or_404(Call, call_id=call_id)
+            instance.save()
+            messages.success(request, 'Return visit added successfully.')
+            return redirect('call', call_id=call_id)
+        else:
+            messages.error(request, 'Request failed. Please ensure the form is valid.')
+    else:
+        form = AddReturnVisit()
+
+    context = {
+        'profile': profile,
+        'call': call,
+        'form': form,
+        'title': 'Pioneer Partner - Add Return Visit',
+    }
+
+    return render(request, 'service/add_return_visit.html', context)
 
 
 @login_required

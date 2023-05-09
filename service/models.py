@@ -48,4 +48,4 @@ class ReturnVisit(models.Model):
     notes = models.TextField(null=True, blank=True, max_length=3000)
 
     def __str__(self):
-        return self.call
+        return self.call.name

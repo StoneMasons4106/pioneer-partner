@@ -30,11 +30,10 @@ class CallAdmin(admin.ModelAdmin):
 class ReturnVisitAdmin(admin.ModelAdmin):
     list_display = (
         'call',
+        'contact_date',
     )
 
     fields = (
-        'call',
-        'contact_date',
         'notes',
     )
 
