@@ -57,6 +57,10 @@
 
 <body>
 
+  <div class="loader-container">
+    <div class="loader"></div>
+  </div>
+
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -299,6 +303,11 @@
   <script src="{% static 'js/comment.js' %}"></script>
   <script src="{% static 'js/bookmark.js' %}"></script>
   <script src="{% static 'js/markNotificationRead.js' %}"></script>
+  <script>
+    $(window).on('load', function () {
+      $('.loader-container').hide();
+    }) 
+  </script>
 
 </body>
 
