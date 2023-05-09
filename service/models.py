@@ -44,7 +44,7 @@ class Call(models.Model):
 class ReturnVisit(models.Model):
 
     call = models.ForeignKey(Call, on_delete=models.CASCADE)
-    contact_date = models.DateTimeField()
+    contact_date = models.DateField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True, max_length=3000)
 
     def __str__(self):
