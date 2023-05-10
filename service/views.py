@@ -155,6 +155,34 @@ def add_return_visit(request, call_id):
 
 
 @login_required
+def edit_return_visit(request, call_id, return_visit_id):
+    
+    profile = get_object_or_404(UserProfile, user=request.user)
+    rv = get_object_or_404(ReturnVisit, pk=return_visit_id)
+
+    if request.method == 'POST':
+        form = AddReturnVisit(request.POST, instance=rv)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Return visit updated successfully.')
+            return redirect('call', call_id=call_id)
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = AddReturnVisit(instance=rv)
+
+    context = {
+        'profile': profile,
+        'call_id': call_id,
+        'return_visit': rv,
+        'form': form,
+        'title': 'Pioneer Partner - Edit Return Visit',
+    }
+
+    return render(request, 'service/edit_return_visit.html', context)
+
+
+@login_required
 def delete_return_visit(request, call_id, return_visit_id):
     
     rv = get_object_or_404(ReturnVisit, pk=return_visit_id)
