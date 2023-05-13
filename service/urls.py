@@ -9,6 +9,7 @@ urlpatterns = [
     path('calls/return_visit/add/<int:call_id>/', views.add_return_visit, name='add_return_visit'),
     path('call/<int:call_id>/', views.call, name='call'),
     path('delete_call/<int:call_id>/', views.delete_call, name='delete_call'),
+    path('call/transfer/<int:call_id>/', views.transfer_call, name='transfer_call'),
     path('call/return_visit/edit/<int:call_id>/<int:return_visit_id>/', views.edit_return_visit, name='edit_return_visit'),
     path('call/return_visit/delete/<int:call_id>/<int:return_visit_id>/', views.delete_return_visit, name='delete_return_visit'),
 ]

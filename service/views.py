@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from profiles.models import UserProfile
+from django.contrib.auth.models import User
 import os
 import requests
 from django.contrib import messages
@@ -123,6 +124,33 @@ def add_call(request):
     }
 
     return render(request, 'service/add_call.html', context)
+
+
+@login_required
+def transfer_call(request, call_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    congregation_users = UserProfile.objects.filter(congregation=profile.congregation)
+    users = [user for user in congregation_users if user.user != request.user]
+    call = get_object_or_404(Call, call_id=call_id)
+
+    if request.method == "POST":
+        data = request.body.decode()
+        username = data.split("user=")[1]
+        user = get_object_or_404(User, username=username)
+        call.user = user
+        call.save()
+        messages.success(request, 'Call has been successfully transferred.')
+        return redirect('calls')
+
+    context = {
+        'profile': profile,
+        'users': users,
+        'call': call,
+        'title': 'Pioneer Partner - Transfer Call',
+    }
+
+    return render(request, 'service/transfer_call.html', context)
 
 
 @login_required
