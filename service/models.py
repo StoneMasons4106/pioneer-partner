@@ -3,6 +3,7 @@ from address.models import AddressField
 from django.contrib.auth.models import User
 import random
 import string
+from congregations.models import Congregation
 
 # Create your models here.
 
@@ -16,7 +17,7 @@ class Call(models.Model):
     name = models.CharField(max_length=254)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10, choices=GENDERS, default='1')
-    age = models.IntegerField(null=True, blank=True)
+    age = models.PositiveIntegerField(null=True, blank=True)
     address = AddressField(null=True, blank=True)
     contact_date = models.DateField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True, max_length=3000)
@@ -49,3 +50,21 @@ class ReturnVisit(models.Model):
 
     def __str__(self):
         return self.call.name
+    
+
+class Territory(models.Model):
+    TERRITORY_STATUSES = [
+        ('1', 'Completed'),
+        ('2', 'Signed Out'),
+    ]
+
+    congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE)
+    number = models.PositiveIntegerField()
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    status = models.CharField(max_length=20, choices=TERRITORY_STATUSES, default='1')
+    signed_out = models.DateField(null=True, blank=True)
+    last_completed = models.DateField(null=True, blank=True)
+    map = models.FileField()
+
+    def __str__(self):
+        return f'{self.number} - {self.congregation}'

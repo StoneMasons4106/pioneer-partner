@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Call, ReturnVisit
+from .models import Call, ReturnVisit, Territory
 from address.forms import AddressField
 from address.forms import AddressWidget
 
@@ -40,5 +40,26 @@ class ReturnVisitAdmin(admin.ModelAdmin):
     ordering = ('call',)
 
 
+class TerritoryAdmin(admin.ModelAdmin):
+    list_display = (
+        'number',
+        'congregation',
+        'status',
+    )
+
+    fields = (
+        'number',
+        'congregation',
+        'status',
+        'assigned_to',
+        'signed_out',
+        'last_completed',
+        'map',
+    )
+
+    ordering = ('congregation',)
+
+
 admin.site.register(Call, CallAdmin)
 admin.site.register(ReturnVisit, ReturnVisitAdmin)
+admin.site.register(Territory, TerritoryAdmin)
