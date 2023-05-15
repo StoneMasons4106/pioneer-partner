@@ -147,6 +147,7 @@ def cart_shift(request, username, shift_id):
     
     profile = get_object_or_404(UserProfile, user=request.user)
     user = get_object_or_404(User, username=username)
+    vacancy = False
     token = os.environ.get('JUSTACART_TOKEN')
     shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={user.email}')
 
@@ -155,10 +156,27 @@ def cart_shift(request, username, shift_id):
             correct_shift = shift
             break
 
+    if int(shift['Schedule']['slots']) > len(shift['ScheduledPublisher']):
+        vacancy = True
+    
+    on_shift = [publisher for publisher in shift['ScheduledPublisher'] if publisher['Publisher']['email'] == request.user.email]
+
+    if request.method == "POST":
+        post = requests.post(f'https://imjustacart.com/api/shifts?token={token}&email={request.user.email}', data={"schedule_id": shift_id})
+        if "ERROR" in post.text:
+            messages.error(request, "Please ensure the email you have on file with Pioneer Partner matches the one on I'm Just a Cart")
+            return redirect('user_cart_shift', username=user.username, shift_id=shift_id)
+        else:
+            messages.success(request, 'You have been signed up to this cart shift.')
+            return redirect('user_cart_shift', username=user.username, shift_id=shift_id)
+    
     context = {
         'profile': profile,
         'shift': correct_shift,
+        'shift_id': shift_id,
         'user': user,
+        'vacancy': vacancy,
+        'on_shift': on_shift,
         'title': f'Pioneer Partner - Cart Shift - {shift_id}',
     }
 

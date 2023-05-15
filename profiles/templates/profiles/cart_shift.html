@@ -3,8 +3,17 @@
 <main id="main" class="main">
   <div class="pagetitle">
     <div class="row">
-        <h1>Cart Shift</h1>
-    </div>
+      <div class="col-lg-4 col-6">
+          <h1>Cart Shift</h1>
+      </div>
+      {% if vacancy and on_shift|length == 0 %}
+      <div class="col-lg-4 col-6 text-end">
+          <form action="/profile/{{ user.username }}/cart_shift/{{ shift_id }}/" method="post">
+            {% csrf_token %}
+            <button class="btn btn-success add-invite" type="submit"><i class="bi bi-plus-circle"></i> Join Cart Shift</button>
+          </form>
+      </div>
+      {% endif %}
     </div>
     <nav>
       <ol class="breadcrumb">
