@@ -204,10 +204,23 @@
               <i class="bi bi-circle"></i><span>Calls</span>
             </a>
           </li>
-          <li>
-            <a class="call-loader" href="#">
-              <i class="bi bi-circle"></i><span>Territories</span>
+          <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#territory-nav" data-bs-toggle="collapse" href="#">
+              <i class="bi bi-circle"></i>
+              <span>Territories</span>
             </a>
+            <ul id="territory-nav" class="nav-content collapse">
+              <li>
+                <a class="call-loader sub-menu" href="#">
+                  <i class="bi bi-circle"></i><span>My Territories</span>
+                </a>
+              </li>
+              <li>
+                <a class="call-loader sub-menu" href="#">
+                  <i class="bi bi-circle"></i><span>Available Territories</span>
+                </a>
+              </li>
+            </ul>
           </li>
           <li>
             <a class="call-loader" href="{% url 'cart_shifts' %}">

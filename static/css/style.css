@@ -60,6 +60,10 @@
     cursor: pointer;
 }
 
+.sub-menu {
+    padding-left: 60px !important;
+}
+
 .bi-people-fill {
     font-size: x-large;
     margin-right: 5px;
