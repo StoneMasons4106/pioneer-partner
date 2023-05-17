@@ -80,7 +80,11 @@ class ServiceMeeting(models.Model):
     zoom_password = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        if self.service_group:
+        if self.zoom and self.service_group:
+            return f'{self.service_group} meets regularly for service on {self.get_day_display()} on Zoom at {self.time}'
+        elif self.zoom:
+            return f'{self.congregation} meets regularly for service on {self.get_day_display()} on Zoom at {self.time}'
+        elif self.service_group:
             return f'{self.service_group} meets regularly for service on {self.get_day_display()} at {self.service_group.service_location} at {self.time}'
         else:
             return f'{self.congregation} meets regularly for service on {self.get_day_display()} at {self.service_location} at {self.time}'
