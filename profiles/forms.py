@@ -17,7 +17,7 @@ class UserProfileForm(forms.ModelForm):
             'profile_picture': 'Profile Picture',
             'bio': 'Bio',
             'location': 'Location',
-            'phone': 'Phone',
+            'phone': 'Phone - Must include + and Country Code',
         }
 
         for field in self.fields:
