@@ -89,6 +89,15 @@
                 </div>
 
                 <div class="row">
+                <div class="col-lg-3 col-md-4 label">Phone:</div>
+                {% if profile.phone %}
+                <div class="col-lg-9 col-md-8"><a href="tel:{{ profile.phone }}">{{ profile.phone }}</a></div>
+                {% else %}
+                <div class="col-lg-9 col-md-8">None</div>
+                {% endif %}
+                </div>
+
+                <div class="row">
                 <div class="col-lg-3 col-md-4 label">Email:</div>
                 {% if user.email %}
                 <div class="col-lg-9 col-md-8"><a href="mailto:{{ user.email }}">{{ user.email }}</a></div>
