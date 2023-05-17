@@ -109,7 +109,7 @@
                 form="edit-service-meeting-form"
                 name="service-location"
                 class="form-control address"
-                placeholder="{{ service_meeting.service_location }}"
+                value="{{ service_meeting.service_location }}"
               />
               {% else %}
               <input
@@ -118,6 +118,40 @@
                 name="service-location"
                 class="form-control address"
                 placeholder="Service Location"
+              />
+              {% endif %}
+              {% if service_meeting.zoom_id %}
+              <input
+                type="text"
+                form="edit-service-meeting-form"
+                name="zoom-id"
+                class="form-control"
+                value="{{ service_meeting.zoom_id }}"
+              />
+              {% else %}
+              <input
+                type="text"
+                form="edit-service-meeting-form"
+                name="zoom-id"
+                class="form-control"
+                placeholder="Zoom ID"
+              />
+              {% endif %}
+              {% if service_meeting.zoom_password %}
+              <input
+                type="text"
+                form="edit-service-meeting-form"
+                name="zoom-password"
+                class="form-control"
+                value="{{ service_meeting.zoom_password }}"
+              />
+              {% else %}
+              <input
+                type="text"
+                form="edit-service-meeting-form"
+                name="zoom-password"
+                class="form-control"
+                placeholder="Zoom Password"
               />
               {% endif %}
               <div class="text-center">

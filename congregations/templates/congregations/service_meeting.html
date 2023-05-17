@@ -45,14 +45,17 @@
             <p><b>Congregation Meeting?</b> Yes</p>
             <p><b>Service Group:</b> None</p>
             {% endif %}
-            {% if service_meeting.service_location %}
+            {% if service_meeting.service_location|length > 0 %}
             <p><b>Location:</b> {{ service_meeting.service_location }}</p>
             {% elif service_meeting.service_group %}
-            <p><b>Location:</b> {{ service_meeting.service_location }}</p>
+            <p><b>Location:</b> {{ service_meeting.service_group.service_location }}</p>
+            {% elif service_meeting.zoom %}
+            <p><b>Location:</b> Zoom</p>
+            <p><b>Meeting ID:</b> {{ service_meeting.zoom_id }}</p>
+            <p><b>Meeting Password:</b> {{ service_meeting.zoom_password }}</p>
             {% else %}
             <p><b>Location:</b> {{ service_meeting.congregation.address }}</p>
             {% endif %}
-            <p></p>
           </div>
         </div>
       </div>

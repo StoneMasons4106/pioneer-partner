@@ -51,6 +51,9 @@ class ServiceMeetingAdmin(admin.ModelAdmin):
         'congregation',
         'service_group',
         'service_location',
+        'zoom',
+        'zoom_id',
+        'zoom_password',
     )
 
     ordering = ('congregation',)

@@ -308,12 +308,29 @@ def add_service_meeting(request):
         except:
             service_location = None
 
+        try:
+            zoom_id_split = new_service_meeting_info.split('zoom-id=')
+            zoom_id = zoom_id_split[1].split('&')[0]
+            zoom_password_split = new_service_meeting_info.split('zoom-password=')
+            zoom_password = zoom_password_split[1].split('&')[0]
+        except:
+            zoom_id = None
+            zoom_password = None
+
         if service_location:
-            new_service_meeting = ServiceMeeting(day=day, time=time, congregation=profile.congregation, service_group=service_group, service_location=service_location)
-            new_service_meeting.save()
+            if zoom_id and zoom_password:
+                new_service_meeting = ServiceMeeting(day=day, time=time, congregation=profile.congregation, service_group=service_group, service_location=service_location, zoom=True, zoom_id=zoom_id, zoom_password=zoom_password)
+                new_service_meeting.save()
+            else:
+                new_service_meeting = ServiceMeeting(day=day, time=time, congregation=profile.congregation, service_group=service_group, service_location=service_location, zoom=False)
+                new_service_meeting.save()
         else:
-            new_service_meeting = ServiceMeeting(day=day, time=time, congregation=profile.congregation, service_group=service_group)
-            new_service_meeting.save()
+            if zoom_id and zoom_password:
+                new_service_meeting = ServiceMeeting(day=day, time=time, congregation=profile.congregation, service_group=service_group, zoom=True, zoom_id=zoom_id, zoom_password=zoom_password)
+                new_service_meeting.save()
+            else:
+                new_service_meeting = ServiceMeeting(day=day, time=time, congregation=profile.congregation, service_group=service_group, zoom=False)
+                new_service_meeting.save()
 
         messages.success(request, 'New service meeting added.')
         return redirect('service_meetings')
@@ -339,7 +356,7 @@ def edit_service_meeting(request, id):
 
     if request.method == "POST":
         new_service_meeting_info = request.body.decode().replace('%3A', ':').replace('%2C', ',').replace('+', ' ')
-
+        
         day_split = new_service_meeting_info.split('day=')
         day = day_split[1].split('&')[0]
         
@@ -358,11 +375,25 @@ def edit_service_meeting(request, id):
         except:
             service_location = None
 
+        try:
+            zoom_id_split = new_service_meeting_info.split('zoom-id=')
+            zoom_id = zoom_id_split[1].split('&')[0]
+            zoom_password_split = new_service_meeting_info.split('zoom-password=')
+            zoom_password = zoom_password_split[1].split('&')[0]
+        except:
+            zoom_id = None
+            zoom_password = None
+
         service_meeting.day = day
         service_meeting.time = time
         service_meeting.service_group = service_group
-        if service_location:
-            service_meeting.service_location = service_location
+        service_meeting.service_location = service_location
+        if zoom_id and zoom_password:
+            service_meeting.zoom = True
+            service_meeting.zoom_id = zoom_id
+            service_meeting.zoom_password = zoom_password
+        else:
+            service_meeting.zoom = False
         service_meeting.save()
 
         messages.success(request, 'Service meeting edited successfully.')

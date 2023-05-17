@@ -36,7 +36,6 @@
             <div class="card schedule-requests-card recent-sales overflow-auto">
               <div class="card-body">
                 <h5 class="card-title">Meetings</h5>
-
                 <table class="table table-borderless datatable">
                   <thead>
                     <tr>
@@ -47,15 +46,18 @@
                   </thead>
                   <tbody>
                     {% for meeting in service_meetings %}
+                    {{ meeting.service_location }}
                     <tr>
                       <td>
                         <a href="{% url 'service_meeting' meeting.id %}">{{ meeting.get_day_display }}</a>
                       </td>
                       <td>{{ meeting.time }}</td>
-                      {% if meeting.service_location %}
+                      {% if meeting.service_location|length > 0 %}
                       <td>{{ meeting.service_location }}</td>
-                      {% elif meeting.service_group.service_location %}
+                      {% elif meeting.service_group %}
                       <td>{{ meeting.service_group.service_location }}</td>
+                      {% elif meeting.zoom %}
+                      <td>Zoom</td>
                       {% else %}
                       <td>{{ meeting.congregation.address }}</td>
                       {% endif %}

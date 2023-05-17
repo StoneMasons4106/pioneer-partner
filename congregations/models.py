@@ -75,6 +75,9 @@ class ServiceMeeting(models.Model):
     congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE, null=True, blank=True)
     service_group = models.ForeignKey(ServiceGroup, on_delete=models.CASCADE, null=True, blank=True)
     service_location = AddressField(null=True, blank=True)
+    zoom = models.BooleanField(default=False, null=True, blank=True)
+    zoom_id = models.CharField(max_length=30, null=True, blank=True)
+    zoom_password = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         if self.service_group:
