@@ -27,6 +27,7 @@ class CustomSignupForm(SignupForm):
         invite = get_object_or_404(Invite, code=self.cleaned_data['invite_code'])
         profile.congregation = invite.congregation
         profile.service_group = invite.service_group
+        profile.phone = self.cleaned_data['phone_number']
         profile.save()
         invite.delete()
         return user

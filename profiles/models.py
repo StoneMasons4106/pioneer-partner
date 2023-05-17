@@ -5,6 +5,7 @@ from allauth.account.signals import email_confirmed
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from congregations.models import Congregation, ServiceGroup
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
@@ -13,6 +14,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=254, null=True, blank=True)
     location = models.CharField(max_length=45, null=True, blank=True)
+    phone = PhoneNumberField()
     profile_picture = models.ImageField(null=True, blank=True)
     congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE, null=True, blank=True)
     service_group = models.ForeignKey(ServiceGroup, on_delete=models.CASCADE, null=True, blank=True)

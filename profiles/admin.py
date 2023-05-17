@@ -11,6 +11,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         'user',
         'bio',
         'location',
+        'phone',
         'profile_picture',
         'service_group',
         'congregation',

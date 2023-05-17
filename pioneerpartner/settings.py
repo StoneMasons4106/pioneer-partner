@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'bugs',
     'crispy_forms',
     'pwa',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
