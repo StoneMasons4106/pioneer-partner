@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 import os
 import requests
 from django.contrib import messages
-from .models import Call, ReturnVisit
+from .models import Call, ReturnVisit, Territory
 from .forms import AddCall, AddReturnVisit
 
 # Create your views here.
@@ -231,3 +231,17 @@ def delete_call(request, call_id):
     messages.success(request, 'Call has been successfully been deleted.')
 
     return redirect('calls')
+
+
+@login_required
+def my_territories(request):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territories = Territory.objects.filter(status='2', assigned_to=request.user)
+
+    context = {
+        'profile': profile,
+        'territories': territories,
+    }
+
+    return render(request, 'service/my_territories.html', context)
