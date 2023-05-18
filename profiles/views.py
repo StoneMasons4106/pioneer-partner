@@ -90,7 +90,7 @@ def user_view(request, username):
             posts = Post.objects.filter(Q(comment__isnull=True), user=user).order_by("-created")
             service_days = RegularServiceDay.objects.filter(user=user).order_by('day')
 
-            token = os.environ.get('JUSTACART_TOKEN')
+            token = os.environ.get(f'JUSTACART_TOKEN_{user_profile.congregation.congregation_id}')
             shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={user.email}')
 
             if "ERROR" in shifts.text:
@@ -148,7 +148,7 @@ def cart_shift(request, username, shift_id):
     profile = get_object_or_404(UserProfile, user=request.user)
     user = get_object_or_404(User, username=username)
     vacancy = False
-    token = os.environ.get('JUSTACART_TOKEN')
+    token = os.environ.get(f'JUSTACART_TOKEN_{profile.congregation.congregation_id}')
     shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={user.email}')
 
     for shift in shifts.json()['data']:
@@ -162,7 +162,7 @@ def cart_shift(request, username, shift_id):
     on_shift = [publisher for publisher in shift['ScheduledPublisher'] if publisher['Publisher']['email'] == request.user.email]
 
     if request.method == "POST":
-        post = requests.post(f'https://imjustacart.com/api/shifts?token={token}&email={request.user.email}', data={"schedule_id": shift_id})
+        post = requests.post(f'https://imjustacart.com/api/shift{shift_id}?token={token}&email={request.user.email}')
         if "ERROR" in post.text:
             messages.error(request, "Please ensure the email you have on file with Pioneer Partner matches the one on I'm Just a Cart")
             return redirect('user_cart_shift', username=user.username, shift_id=shift_id)

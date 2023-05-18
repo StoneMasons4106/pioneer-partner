@@ -37,7 +37,7 @@ def cart_shifts(request):
 def cart_shift(request, shift_id):
     
     profile = get_object_or_404(UserProfile, user=request.user)
-    token = os.environ.get('JUSTACART_TOKEN')
+    token = os.environ.get(f'JUSTACART_TOKEN_{profile.congregation.congregation_id}')
     shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={request.user.email}')
 
     for shift in shifts.json()['data']:
