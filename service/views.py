@@ -248,14 +248,14 @@ def my_territories(request):
 
 
 @login_required
-def territory(request, territry_id):
+def my_territory(request, territory_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    territory = get_object_or_404(Territory, territry_id=territry_id)
+    territory = get_object_or_404(Territory, territory_id=territory_id)
 
     context = {
         'profile': profile,
         'territory': territory,
     }
 
-    return render(request, 'service/territory.html', context)
+    return render(request, 'service/my_territory.html', context)

@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'notifications',
     'bugs',
     'crispy_forms',
+    'crispy_bootstrap4',
     'pwa',
     'phonenumber_field',
 ]
@@ -169,6 +170,8 @@ SITE_ID = 1
 GOOGLE_API_KEY = os.environ.get('GOOGLE_MAPS_API')
 
 CELERY_TIMEZONE = os.environ.get('TZ')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Static files (CSS, JavaScript, Images)

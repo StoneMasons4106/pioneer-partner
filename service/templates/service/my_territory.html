@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div class="row">
+      <div class="col-lg-4 col-6">
+          <h1>Territory</h1>
+      </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'my_territories' %}">My Territories</a>
+        </li>
+        <li class="breadcrumb-item active">Territory</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section post">
+    <div class="row">
+      <div class="col-xl-8">
+        <!-- Card with header and footer -->
+        <div class="card mt-3">
+          <div class="card-body mt-4">
+            <p><b>Number:</b> {{ territory.number }}</p>
+            <p><b>Congregation:</b> {{ territory.congregation }}</p>
+            <p><b>Last Completed:</b> {{ territory.last_completed }}</p>
+            <p><b>Signed Out:</b> {{ territory.signed_out }}</p>
+            <p><b>View Map:</b> <a href="#">View Here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

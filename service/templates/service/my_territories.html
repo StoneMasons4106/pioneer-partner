@@ -39,7 +39,7 @@
                                 <h6>#{{ territory.number }} - {{ territory.congregation }}</h6>
                             </div>
                             <div class="delete-regular-day-form">
-                                <a class="btn btn-primary btn-sm edit-invite-button" href="#"><i class="bi bi-pencil"></i></a>
+                                <a class="btn btn-primary btn-sm edit-invite-button" href="{% url 'my_territory' territory.territory_id %}"><i class="bi bi-pencil"></i></a>
                             </div>
                         </div>
                     </div>
