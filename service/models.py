@@ -1,5 +1,6 @@
 from django.db import models
 from address.models import AddressField
+from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 import random
 import string
@@ -64,7 +65,7 @@ class Territory(models.Model):
     status = models.CharField(max_length=20, choices=TERRITORY_STATUSES, default='1')
     signed_out = models.DateField(null=True, blank=True)
     last_completed = models.DateField(null=True, blank=True)
-    map = models.FileField()
+    map = models.FileField(validators=[FileExtensionValidator(['pdf'])])
 
     def __str__(self):
         return f'{self.number} - {self.congregation}'
