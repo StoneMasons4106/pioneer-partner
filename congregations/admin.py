@@ -15,6 +15,7 @@ class CongregationAdmin(admin.ModelAdmin):
         'name',
         'address',
         'number',
+        'justacart_token',
     )
 
     ordering = ('congregation_id',)

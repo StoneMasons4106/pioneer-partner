@@ -11,6 +11,7 @@ class Congregation(models.Model):
     address = AddressField(null=True, blank=True)
     congregation_id = models.CharField(max_length=10, unique=True)
     number = models.CharField(max_length=10)
+    justacart_token = models.CharField(max_length=254, null=True, blank=True)
 
     def _generate_congregation_id(self):
         """

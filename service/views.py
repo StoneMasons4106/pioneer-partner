@@ -14,7 +14,7 @@ from .forms import AddCall, AddReturnVisit
 def cart_shifts(request):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    token = os.environ.get('JUSTACART_TOKEN')
+    token = profile.congregation.justacart_token
     shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={request.user.email}')
 
     if "ERROR" in shifts.text:
@@ -37,7 +37,7 @@ def cart_shifts(request):
 def cart_shift(request, shift_id):
     
     profile = get_object_or_404(UserProfile, user=request.user)
-    token = os.environ.get(f'JUSTACART_TOKEN_{profile.congregation.congregation_id}')
+    token = profile.congregation.justacart_token
     shifts = requests.get(f'https://imjustacart.com/api/shifts?token={token}&email={request.user.email}')
 
     for shift in shifts.json()['data']:
