@@ -37,7 +37,7 @@ class EditCongregationInfo(forms.ModelForm):
     class Meta:
         model = Congregation
         address = AddressField()
-        exclude = ('congregation_id',)
+        exclude = ('congregation_id', 'justacart_token',)
 
     def __init__(self, *args, **kwargs):
         """

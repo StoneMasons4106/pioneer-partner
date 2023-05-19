@@ -9,8 +9,8 @@
       {% for group in groups %}
       {% if group.name == "Congregation Admin" %}
       <div class="col-lg-4 col-6 text-end">
-        <a href="{% url 'edit_service_meeting' service_meeting.id %}" class="btn btn-primary add-invite"><i class="bi bi-pencil"></i> Edit Service Meeting</a>
-        <a href="{% url 'delete_service_meeting' service_meeting.id %}" class="btn btn-danger add-invite"><i class="bi bi-trash"></i> Delete Service Meeting</a>
+        <a href="{% url 'edit_service_meeting' service_meeting.id %}" class="btn btn-primary userview-admin-buttons"><i class="bi bi-pencil"></i> Edit Service Meeting</a>
+        <a href="{% url 'delete_service_meeting' service_meeting.id %}" class="btn btn-danger userview-admin-buttons"><i class="bi bi-trash"></i> Delete Service Meeting</a>
       </div>
       {% endif %}
       {% endfor %}

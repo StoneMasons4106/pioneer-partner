@@ -43,6 +43,7 @@ class ReturnVisitAdmin(admin.ModelAdmin):
 class TerritoryAdmin(admin.ModelAdmin):
     list_display = (
         'number',
+        'territory_id',
         'congregation',
         'status',
     )

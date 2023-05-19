@@ -59,6 +59,7 @@ class Territory(models.Model):
         ('2', 'Signed Out'),
     ]
 
+    territory_id = models.CharField(max_length=16, unique=True)
     congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -66,6 +67,22 @@ class Territory(models.Model):
     signed_out = models.DateField(null=True, blank=True)
     last_completed = models.DateField(null=True, blank=True)
     map = models.FileField(validators=[FileExtensionValidator(['pdf'])])
+    
+    def _generate_territory_id(self):
+        """
+        Generate a random, unique post ID using UUID
+        """
+        output_string = ''.join(random.SystemRandom().choice(string.digits) for _ in range(16))
+        return output_string
+
+    def save(self, *args, **kwargs):
+        """
+        Override the original save method to set the order number
+        if it hasn't been set already.
+        """
+        if not self.territory_id:
+            self.territory_id = self._generate_territory_id()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.number} - {self.congregation}'
