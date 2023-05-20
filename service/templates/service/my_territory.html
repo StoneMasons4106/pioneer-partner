@@ -31,7 +31,11 @@
             <p><b>Congregation:</b> {{ territory.congregation }}</p>
             <p><b>Last Completed:</b> {{ territory.last_completed }}</p>
             <p><b>Signed Out:</b> {{ territory.signed_out }}</p>
-            <p><b>View Map:</b> <a href="#">View Here</a></p>
+            <p><b>View Map:</b> <a href="{{ MEDIA_URL }}{{ territory.map }}" class="preview-link glightbox">View Here</a></p>
+            <form action="{% url 'my_territory' territory.territory_id %}" method="post" class="text-center">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success"><i class="bi bi-check-all"></i> Mark Complete</button>
+            </form>
           </div>
         </div>
       </div>

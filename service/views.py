@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from profiles.models import UserProfile
 from django.contrib.auth.models import User
-import os
 import requests
 from django.contrib import messages
 from .models import Call, ReturnVisit, Territory
 from .forms import AddCall, AddReturnVisit
+from datetime import date
 
 # Create your views here.
 
@@ -242,6 +242,7 @@ def my_territories(request):
     context = {
         'profile': profile,
         'territories': territories,
+        'title': 'Pioneer Partner - My Territories',
     }
 
     return render(request, 'service/my_territories.html', context)
@@ -253,9 +254,18 @@ def my_territory(request, territory_id):
     profile = get_object_or_404(UserProfile, user=request.user)
     territory = get_object_or_404(Territory, territory_id=territory_id)
 
+    if request.method == "POST":
+        territory.status = '1'
+        territory.assigned_to = None
+        territory.last_completed = date.today()
+        territory.save()
+        messages.success(request, 'Territory has been marked complete!')
+        return redirect('my_territories')
+
     context = {
         'profile': profile,
         'territory': territory,
+        'title': 'Pioneer Partner - My Territory',
     }
 
     return render(request, 'service/my_territory.html', context)

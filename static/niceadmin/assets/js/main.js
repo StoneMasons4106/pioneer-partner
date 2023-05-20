@@ -56,6 +56,13 @@
   }
 
   /**
+   * Initiate glightbox
+   */
+  const glightbox = GLightbox({
+    selector: '.glightbox'
+  });
+
+  /**
    * Navbar links active state on scroll
    */
   let navbarlinks = select('#navbar .scrollto', true)
