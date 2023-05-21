@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from profiles.models import UserProfile
 from django.contrib.auth.models import User
+from django.http.response import HttpResponse
 import requests
+import urllib
 from django.contrib import messages
-from .models import Call, ReturnVisit, Territory, Street
+from .models import Call, ReturnVisit, Territory, Street, NHRecord
 from .forms import AddCall, AddReturnVisit, AddStreet
 from datetime import date
 
@@ -73,7 +75,7 @@ def calls(request):
 def call(request, call_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    call = get_object_or_404(Call, call_id=call_id)
+    call = get_object_or_404(Call, call_id=str(call_id).zfill(16))
     return_visits = ReturnVisit.objects.filter(call=call).order_by("-contact_date")
 
     if request.method == 'POST':
@@ -132,7 +134,7 @@ def transfer_call(request, call_id):
     profile = get_object_or_404(UserProfile, user=request.user)
     congregation_users = UserProfile.objects.filter(congregation=profile.congregation)
     users = [user for user in congregation_users if user.user != request.user]
-    call = get_object_or_404(Call, call_id=call_id)
+    call = get_object_or_404(Call, call_id=str(call_id).zfill(16))
 
     if request.method == "POST":
         data = request.body.decode()
@@ -157,16 +159,16 @@ def transfer_call(request, call_id):
 def add_return_visit(request, call_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    call = get_object_or_404(Call, call_id=call_id)
+    call = get_object_or_404(Call, call_id=str(call_id).zfill(16))
 
     if request.method == "POST":
         form = AddReturnVisit(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.call = get_object_or_404(Call, call_id=call_id)
+            instance.call = get_object_or_404(Call, call_id=str(call_id).zfill(16))
             instance.save()
             messages.success(request, 'Return visit added successfully.')
-            return redirect('call', call_id=call_id)
+            return redirect('call', call_id=str(call_id).zfill(16))
         else:
             messages.error(request, 'Request failed. Please ensure the form is valid.')
     else:
@@ -193,7 +195,7 @@ def edit_return_visit(request, call_id, return_visit_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Return visit updated successfully.')
-            return redirect('call', call_id=call_id)
+            return redirect('call', call_id=str(call_id).zfill(16))
         else:
             messages.error(request, 'Update failed. Please ensure the form is valid.')
     else:
@@ -217,7 +219,7 @@ def delete_return_visit(request, call_id, return_visit_id):
     rv.delete()
     messages.success(request, 'Return visit has been successfully been deleted.')
 
-    return redirect('call', call_id=call_id)
+    return redirect('call', call_id=str(call_id).zfill(16))
 
 
 @login_required
@@ -252,7 +254,7 @@ def my_territories(request):
 def my_territory(request, territory_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    territory = get_object_or_404(Territory, territory_id=territory_id)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
 
     if request.method == "POST":
         territory.status = '1'
@@ -277,7 +279,7 @@ def my_territory(request, territory_id):
 def nh_records(request, territory_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    territory = get_object_or_404(Territory, territory_id=territory_id)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
     streets = Street.objects.filter(territory=territory)
 
     context = {
@@ -294,7 +296,7 @@ def nh_records(request, territory_id):
 def add_nh_record(request, territory_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
-    territory = get_object_or_404(Territory, territory_id=territory_id)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
 
     if request.method == 'POST':
         form = AddStreet(request.POST)
@@ -303,7 +305,7 @@ def add_nh_record(request, territory_id):
             instance.territory = territory
             instance.save()
             messages.success(request, 'NH Record added successfully!')
-            return redirect('nh_records', territory_id=territory_id)
+            return redirect('nh_records', territory_id=str(territory_id).zfill(16))
         else:
             messages.error(request, 'Update failed. Please ensure the form is valid.')
     else:
@@ -317,3 +319,31 @@ def add_nh_record(request, territory_id):
     }
 
     return render(request, 'service/add_nh_record.html', context)
+
+
+@login_required
+def nh_record(request, territory_id, street_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    street = get_object_or_404(Street, pk=street_id)
+    houses = NHRecord.objects.filter(street=street)
+
+    if request.method == "POST":
+        data = request.body.decode('ascii', 'replace')
+        cleaned_data = urllib.parse.unquote(data, encoding='utf-8', errors='replace').replace("+", " ")
+        house_number_split = cleaned_data.split('form[1][value]=')[1]
+        house_number = house_number_split.split('&')[0]
+        house = NHRecord(number=int(house_number), street=street)
+        house.save()
+        return HttpResponse(200)
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'street': street,
+        'houses': houses,
+        'title': 'Pioneer Partner - NH Record',
+    }
+
+    return render(request, 'service/nh_record.html', context)

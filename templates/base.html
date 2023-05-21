@@ -218,7 +218,7 @@
               </li>
               <li>
                 <a class="call-loader sub-menu" href="#">
-                  <i class="bi bi-circle"></i><span>Available Territories</span>
+                  <i class="bi bi-circle"></i><span>Congregation Territories</span>
                 </a>
               </li>
             </ul>
@@ -318,16 +318,20 @@
   <script src="{% static 'js/comment.js' %}"></script>
   <script src="{% static 'js/bookmark.js' %}"></script>
   <script src="{% static 'js/markNotificationRead.js' %}"></script>
+  <script src="{% static 'js/addHouse.js' %}"></script>
   <script>
     $('.call-loader').on('click', function() {
       $('.main').hide();
       $('.footer').hide();
+      $('.alert').hide();
       $('.loader-container').show();
     });
     $(window).on('load', function () {
+      $('.modal').hide();
       $('.loader-container').hide();
       $('.main').show();
       $('.footer').show();
+      $('.alert').show();
     });
   </script>
 
