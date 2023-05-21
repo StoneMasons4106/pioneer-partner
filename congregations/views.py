@@ -190,7 +190,7 @@ def edit_service_group_info(request, service_group_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Service group updated successfully.')
-            return redirect('service_group')
+            return redirect('service_group', service_group_id=service_group_id)
         else:
             messages.error(request, 'Update failed. Please ensure the form is valid.')
     else:
