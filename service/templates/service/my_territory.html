@@ -6,6 +6,9 @@
       <div class="col-lg-4 col-6">
           <h1>Territory</h1>
       </div>
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'add_nh_record' territory.territory_id %}" class="btn btn-primary add-invite"><i class="bi bi-plus-circle"></i> Add NH Record</a>
+      </div>
     </div>
     <nav>
       <ol class="breadcrumb">
@@ -34,7 +37,8 @@
             <p><b>View Map:</b> <a href="{{ MEDIA_URL }}{{ territory.map }}" class="preview-link glightbox">View Here</a></p>
             <form action="{% url 'my_territory' territory.territory_id %}" method="post" class="text-center">
               {% csrf_token %}
-              <button type="submit" class="btn btn-success"><i class="bi bi-check-all"></i> Mark Complete</button>
+              <a href="{% url 'nh_records' territory.territory_id %}" class="btn btn-primary userview-admin-buttons"><i class="bi bi-eye"></i> View NH Records</a>
+              <button type="submit" class="btn btn-success userview-admin-buttons"><i class="bi bi-check-all"></i> Mark Complete</button>
             </form>
           </div>
         </div>

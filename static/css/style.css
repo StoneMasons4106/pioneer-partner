@@ -168,7 +168,9 @@
 
 .schedule-requests-card .dataTable-search,
 .schedule-requests-card .dataTable-dropdown,
-.schedule-requests-card .dataTable-bottom {
+.schedule-requests-card .dataTable-bottom,
+.gprev,
+.gnext {
     display: none;
 }
 

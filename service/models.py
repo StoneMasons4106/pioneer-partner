@@ -86,3 +86,21 @@ class Territory(models.Model):
 
     def __str__(self):
         return f'{self.number} - {self.congregation}'
+
+
+class Street(models.Model):
+        
+    name = models.CharField(max_length=254)
+    territory = models.ForeignKey(Territory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class NHRecord(models.Model):
+    
+    number = models.PositiveIntegerField()
+    street = models.ForeignKey(Street, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.number} {self.street}'

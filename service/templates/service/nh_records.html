@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+
+<main id="main" class="main">
+    <div class="pagetitle">
+      <div class="row">
+        <div class="col-lg-4 col-6">
+            <h1>NH Records</h1>
+        </div>
+      </div>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'my_territories' %}">My Territories</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'my_territory' territory.territory_id %}">Territory</a>
+          </li>
+          <li class="breadcrumb-item">NH Records</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+          <!-- Left side columns -->
+          <div class="col-lg-8">
+            {% for street in streets %}
+            <div class="row">
+                <!-- Sales Card -->
+                <div class="col">
+                    <div class="card info-card invite-card">
+                    <div class="card-body invite-card-body">
+                        <div class="d-flex align-items-center">
+                            <div
+                                class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                            >
+                            <i class="bi bi-signpost"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6>{{ street.name }}</h6>
+                            </div>
+                            <div class="delete-regular-day-form">
+                                <a class="btn btn-primary btn-sm edit-invite-button" href="#"><i class="bi bi-pencil"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- End Sales Card -->
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+    </section>
+
+</main>
+
+{% endblock %}

@@ -4,8 +4,8 @@ from profiles.models import UserProfile
 from django.contrib.auth.models import User
 import requests
 from django.contrib import messages
-from .models import Call, ReturnVisit, Territory
-from .forms import AddCall, AddReturnVisit
+from .models import Call, ReturnVisit, Territory, Street
+from .forms import AddCall, AddReturnVisit, AddStreet
 from datetime import date
 
 # Create your views here.
@@ -259,6 +259,8 @@ def my_territory(request, territory_id):
         territory.assigned_to = None
         territory.last_completed = date.today()
         territory.save()
+        nh_records = Street.objects.filter(territory=territory)
+        nh_records.delete()
         messages.success(request, 'Territory has been marked complete!')
         return redirect('my_territories')
 
@@ -269,3 +271,49 @@ def my_territory(request, territory_id):
     }
 
     return render(request, 'service/my_territory.html', context)
+
+
+@login_required
+def nh_records(request, territory_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=territory_id)
+    streets = Street.objects.filter(territory=territory)
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'streets': streets,
+        'title': 'Pioneer Partner - NH Records',
+    }
+
+    return render(request, 'service/nh_records.html', context)
+
+
+@login_required
+def add_nh_record(request, territory_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=territory_id)
+
+    if request.method == 'POST':
+        form = AddStreet(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.territory = territory
+            instance.save()
+            messages.success(request, 'NH Record added successfully!')
+            return redirect('nh_records', territory_id=territory_id)
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = AddStreet()
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'form': form,
+        'title': 'Pioneer Partner - Add NH Record',
+    }
+
+    return render(request, 'service/add_nh_record.html', context)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Call, ReturnVisit, Territory
+from .models import Call, ReturnVisit, Territory, Street, NHRecord
 from address.forms import AddressField
 from address.forms import AddressWidget
 
@@ -61,6 +61,40 @@ class TerritoryAdmin(admin.ModelAdmin):
     ordering = ('congregation',)
 
 
+class StreetAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'territory',
+    )
+
+    fields = (
+        'name',
+        'territory',
+    )
+
+    ordering = (
+        'territory',
+    )
+
+
+class NHRecordAdmin(admin.ModelAdmin):
+    list_display = (
+        'number',
+        'street',
+    )
+
+    fields = (
+        'number',
+        'street',
+    )
+
+    ordering = (
+        'street',
+    )
+
+
 admin.site.register(Call, CallAdmin)
 admin.site.register(ReturnVisit, ReturnVisitAdmin)
 admin.site.register(Territory, TerritoryAdmin)
+admin.site.register(Street, StreetAdmin)
+admin.site.register(NHRecord, NHRecordAdmin)
