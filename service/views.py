@@ -9,6 +9,7 @@ from django.contrib import messages
 from .models import Call, ReturnVisit, Territory, Street, NHRecord
 from .forms import AddCall, AddReturnVisit, AddStreet
 from datetime import date
+import json
 
 # Create your views here.
 
@@ -336,8 +337,8 @@ def nh_record(request, territory_id, street_id):
         house_number = house_number_split.split('&')[0]
         house = NHRecord(number=int(house_number), street=street)
         house.save()
-        data = {house.id: house.id}
-        return HttpResponse(data, content_type="application/json")
+        data = {"house_id": house.id}
+        return HttpResponse(json.dumps(data, indent=4), content_type="application/json")
 
     context = {
         'profile': profile,
