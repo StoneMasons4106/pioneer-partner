@@ -7,7 +7,8 @@
             <h1>{{ street.name }}</h1>
         </div>
         <div class="col-lg-4 col-6 text-end">
-            <a href="#" class="btn btn-primary add-invite" data-bs-toggle="modal" data-bs-target="#houseNumber"><i class="bi bi-plus-circle"></i> Add House #</a>
+            <a href="#" class="btn btn-primary userview-admin-buttons" data-bs-toggle="modal" data-bs-target="#houseNumber"><i class="bi bi-plus-circle"></i> Add House #</a>
+            <a href="{% url 'delete_nh_record' territory.territory_id street.id %}" class="btn btn-danger userview-admin-buttons"><i class="bi bi-trash"></i> Delete NH Record</a>
         </div>
       </div>
       <nav>
@@ -35,7 +36,7 @@
           <!-- Left side columns -->
           <div class="col-lg-8 houses">
             {% for house in houses %}
-            <div class="row">
+            <div class="row house house-{{ house.id }}">
                 <!-- Sales Card -->
                 <div class="col">
                     <div class="card info-card invite-card">
@@ -50,7 +51,13 @@
                                 <h6>{{ house.number }}</h6>
                             </div>
                             <div class="delete-regular-day-form">
-                                <a class="btn btn-danger btn-sm edit-invite-button" href="#"><i class="bi bi-trash"></i></a>
+                              <form action="" name="delete-nh-record-form" class="delete-nh-record-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="territory" value="{{ territory.territory_id }}">
+                                <input type="hidden" name="street" value="{{ street.id }}">
+                                <input type="hidden" name="nh-record" value="{{ house.id }}">
+                                <a class="btn btn-danger btn-sm edit-invite-button delete-nh-record-button"><i class="bi bi-trash"></i></a>
+                              </form>
                             </div>
                         </div>
                     </div>
@@ -74,6 +81,7 @@
             </div>
             <form id="add-house-number-form">
             <div class="modal-body">
+                {% csrf_token %}
                 <input type="number" form="add-house-number-form" id="house-number" name="house-number" class="form-control" placeholder="House Number" required>
                 <input type="hidden" form="add-house-number-form" id="territory-id" name="territory-id" value="{{ territory.territory_id }}">
                 <input type="hidden" form="add-house-number-form" id="street-id" name="street-id" value="{{ street.id }}">

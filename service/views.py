@@ -347,3 +347,25 @@ def nh_record(request, territory_id, street_id):
     }
 
     return render(request, 'service/nh_record.html', context)
+
+
+@login_required
+def delete_nh_record(request, territory_id, street_id):
+
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    street = get_object_or_404(Street, pk=street_id)
+    street.delete()
+    messages.success(request, 'NH record has been deleted.')
+    return redirect('nh_records', territory_id=str(territory.territory_id).zfill(16))
+
+
+@login_required
+def delete_house_record(request, territory_id, street_id, house_id):
+
+    if request.method == "POST":
+        data = request.body.decode('ascii', 'replace')
+        cleaned_data = urllib.parse.unquote(data, encoding='utf-8', errors='replace').replace("+", " ")
+        house_id = cleaned_data.split('form[3][value]=')[1]
+        house = get_object_or_404(NHRecord, pk=house_id)
+        house.delete()
+        return HttpResponse(200)
