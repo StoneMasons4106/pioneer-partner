@@ -336,7 +336,8 @@ def nh_record(request, territory_id, street_id):
         house_number = house_number_split.split('&')[0]
         house = NHRecord(number=int(house_number), street=street)
         house.save()
-        return HttpResponse(200)
+        data = {house.id: house.id}
+        return HttpResponse(data, content_type="application/json")
 
     context = {
         'profile': profile,
