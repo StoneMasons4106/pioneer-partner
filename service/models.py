@@ -62,7 +62,7 @@ class Territory(models.Model):
     territory_id = models.CharField(max_length=16, unique=True)
     congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20, choices=TERRITORY_STATUSES, default='1')
     signed_out = models.DateField(null=True, blank=True)
     last_completed = models.DateField(null=True, blank=True)

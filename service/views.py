@@ -371,3 +371,42 @@ def delete_house_record(request, territory_id, street_id, house_id):
         house = get_object_or_404(NHRecord, pk=house_id)
         house.delete()
         return HttpResponse(200)
+    
+
+@login_required
+def congregation_territories(request):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    congregation = profile.congregation
+    territories = Territory.objects.filter(congregation=congregation, status="1").order_by("last_completed")[:5]
+
+    context = {
+        'profile': profile,
+        'territories': territories,
+        'title': 'Pioneer Partner - Congregation Territories',
+    }
+
+    return render(request, 'service/congregation_territories.html', context)
+
+
+@login_required
+def congregation_territory(request, territory_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+
+    if request.method == "POST":
+        territory.assigned_to = request.user
+        territory.status = '2'
+        territory.signed_out = date.today()
+        territory.save()
+        messages.success(request, 'Territory has been successfully signed out.')
+        return redirect('my_territory', territory_id=str(territory_id).zfill(16))
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'title': 'Pioneer Partner - Congregation Territory',
+    }
+
+    return render(request, 'service/congregation_territory.html', context)

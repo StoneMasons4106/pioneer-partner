@@ -217,7 +217,7 @@
                 </a>
               </li>
               <li>
-                <a class="call-loader sub-menu" href="#">
+                <a class="call-loader sub-menu" href="{% url 'congregation_territories' %}">
                   <i class="bi bi-circle"></i><span>Congregation Territories</span>
                 </a>
               </li>
@@ -320,15 +320,10 @@
   <script src="{% static 'js/markNotificationRead.js' %}"></script>
   <script src="{% static 'js/addHouse.js' %}"></script>
   <script>
-    $('.call-loader').on('click', function() {
-      $('.main').hide();
-      $('.footer').hide();
-      $('.loader-container').show();
-    });
-    $(window).on('load', function () {
-      $('.loader-container').hide();
+    $(window).on('load', function() {
       $('.main').show();
       $('.footer').show();
+      $('.loader-container').hide();
     });
   </script>
 

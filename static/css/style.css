@@ -189,6 +189,10 @@
     color: #012970;
 }
 
+.last-completed {
+    margin-left: 16px;
+}
+
 @media (max-width: 767px) {
     .dashboard .info-card h6 {
         font-size: 20px;
