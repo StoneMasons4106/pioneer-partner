@@ -25,20 +25,65 @@
     <div class="row">
       <div class="col-xl-8">
         <!-- Card with header and footer -->
-        <div class="card mt-3">
-          <div class="card-body mt-4">
-            <p><b>Number:</b> {{ territory.number }}</p>
-            <p><b>Congregation:</b> {{ territory.congregation }}</p>
-            <p><b>Status:</b> {{ territory.get_status_display }}</p>
-            <p><b>Last Completed:</b> {{ territory.last_completed }}</p>
-            <p><b>Signed Out:</b> {{ territory.signed_out }}</p>
-            <p><b>View Map:</b> <a href="{{ MEDIA_URL }}{{ territory.map }}" class="preview-link glightbox">View Here</a></p>
-            <form action="{% url 'my_territory' territory.territory_id %}" method="post" class="text-center">
-              {% csrf_token %}
-              <a href="{% url 'nh_records' territory.territory_id %}" class="btn btn-primary userview-admin-buttons"><i class="bi bi-eye"></i> View NH Records</a>
-              <button type="submit" class="btn btn-success userview-admin-buttons"><i class="bi bi-check-all"></i> Mark Complete</button>
-            </form>
-          </div>
+        <div class="card">
+        <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#territory-overview">Territory Overview</button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#do-not-calls">Do Not Calls</button>
+            </li>
+
+            </ul>
+            <div class="tab-content pt-2">
+
+            <div class="tab-pane fade show active profile-overview" id="territory-overview">
+              <div class="card-body mt-4">
+                <p><b>Number:</b> {{ territory.number }}</p>
+                <p><b>Congregation:</b> {{ territory.congregation }}</p>
+                <p><b>Status:</b> {{ territory.get_status_display }}</p>
+                <p><b>Last Completed:</b> {{ territory.last_completed }}</p>
+                <p><b>Signed Out:</b> {{ territory.signed_out }}</p>
+                <p><b>View Map:</b> <a href="{{ MEDIA_URL }}{{ territory.map }}" class="preview-link glightbox">View Here</a></p>
+                <form action="{% url 'my_territory' territory.territory_id %}" method="post" class="text-center">
+                  {% csrf_token %}
+                  <a href="{% url 'nh_records' territory.territory_id %}" class="btn btn-primary userview-admin-buttons"><i class="bi bi-eye"></i> View NH Records</a>
+                  <button type="submit" class="btn btn-success userview-admin-buttons"><i class="bi bi-check-all"></i> Mark Complete</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="tab-pane fade pt-3" id="do-not-calls">
+              {% for call in do_not_calls %}
+              <div class="row">
+                <!-- Sales Card -->
+                <div class="col">
+                  <div class="card info-card invite-card">
+                    <div class="card-body invite-card-body">
+                      <div class="d-flex align-items-center">
+                        <div
+                          class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                        >
+                        <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div class="ps-3 userview-schedule-data">
+                          <h6>
+                            <a href="#" class="call-name">{{ call.address }}</a>
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Sales Card -->
+              </div>
+              {% endfor %}
+            </div>
+        </div>
         </div>
       </div>
     </div>

@@ -104,3 +104,13 @@ class NHRecord(models.Model):
 
     def __str__(self):
         return f'{self.number} {self.street}'
+    
+
+class DoNotCall(models.Model):
+
+    address = AddressField()
+    territory = models.ForeignKey(Territory, on_delete=models.CASCADE)
+    notes = models.TextField(max_length=3000)
+
+    def __str__(self):
+        return str(self.address)

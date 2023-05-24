@@ -6,7 +6,7 @@ from django.http.response import HttpResponse
 import requests
 import urllib
 from django.contrib import messages
-from .models import Call, ReturnVisit, Territory, Street, NHRecord
+from .models import Call, ReturnVisit, Territory, Street, NHRecord, DoNotCall
 from .forms import AddCall, AddReturnVisit, AddStreet
 from datetime import date
 import json
@@ -256,6 +256,7 @@ def my_territory(request, territory_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
     territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    do_not_calls = DoNotCall.objects.filter(territory=territory)
 
     if request.method == "POST":
         territory.status = '1'
@@ -270,6 +271,7 @@ def my_territory(request, territory_id):
     context = {
         'profile': profile,
         'territory': territory,
+        'do_not_calls': do_not_calls,
         'title': 'Pioneer Partner - My Territory',
     }
 
@@ -394,6 +396,7 @@ def congregation_territory(request, territory_id):
 
     profile = get_object_or_404(UserProfile, user=request.user)
     territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    do_not_calls = DoNotCall.objects.filter(territory=territory)
 
     if request.method == "POST":
         territory.assigned_to = request.user
@@ -406,6 +409,7 @@ def congregation_territory(request, territory_id):
     context = {
         'profile': profile,
         'territory': territory,
+        'do_not_calls': do_not_calls,
         'title': 'Pioneer Partner - Congregation Territory',
     }
 
