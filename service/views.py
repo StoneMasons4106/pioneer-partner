@@ -513,6 +513,7 @@ def do_not_call(request, territory_id, do_not_call_id):
         'profile': profile,
         'territory': territory,
         'do_not_call': do_not_call,
+        'title': 'Pioneer Partner - Do Not Call',
     }
 
     return render(request, 'service/do_not_call.html', context)
@@ -545,6 +546,7 @@ def add_do_not_call(request, territory_id):
         'territory': territory,
         'form': form,
         'page': 'Edit Congregation',
+        'title': 'Pioneer Partner - Add Do Not Call',
     }
 
     return render(request, 'service/add_do_not_call.html', context)
