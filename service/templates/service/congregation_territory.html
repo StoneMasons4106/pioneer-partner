@@ -9,7 +9,8 @@
       {% for group in groups %}
       {% if group.name == "Congregation Admin" %}
       <div class="col-lg-4 col-6 text-end">
-        <a href="{% url 'edit_congregation_territory' territory.territory_id %}" class="btn btn-primary add-invite"><i class="bi bi-pencil"></i> Edit Territory</a>
+        <a href="{% url 'add_do_not_call' territory.territory_id %}" class="btn btn-primary add-invite userview-admin-buttons"><i class="bi bi-plus-circle"></i> Add Do Not Call</a>
+        <a href="{% url 'edit_congregation_territory' territory.territory_id %}" class="btn btn-success add-invite userview-admin-buttons"><i class="bi bi-pencil"></i> Edit Territory</a>
       </div>
       {% endif %}
       {% endfor %}
@@ -57,7 +58,7 @@
                   <p><b>View Map:</b> <a href="{{ MEDIA_URL }}{{ territory.map }}" class="preview-link glightbox">View Here</a></p>
                   <form action="{% url 'congregation_territory' territory.territory_id %}" method="post" class="text-center">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success"><i class="bi bi-pencil-square"></i> Sign Out Territory</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Sign Out Territory</button>
                   </form>
                 </div>
               </div>
@@ -77,7 +78,7 @@
                           </div>
                           <div class="ps-3 userview-schedule-data">
                             <h6>
-                              <a href="#" class="call-name">{{ call.address }}</a>
+                              <a href="{% url 'do_not_call' territory.territory_id call.id %}" class="call-name">{{ call.address }}</a>
                             </h6>
                           </div>
                         </div>

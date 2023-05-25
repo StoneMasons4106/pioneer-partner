@@ -1,6 +1,6 @@
 from django import forms
 from address.forms import AddressField
-from .models import Call, ReturnVisit, Street, Territory
+from .models import Call, ReturnVisit, Street, Territory, DoNotCall
 from profiles.models import UserProfile
 from .widgets import NumberInput
 
@@ -103,3 +103,30 @@ class AddTerritory(forms.ModelForm):
             placeholder = placeholders[field]
             self.fields[field].widget.attrs['placeholder'] = placeholder
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+class AddDoNotCall(forms.ModelForm):
+    class Meta:
+        model = DoNotCall
+        address = AddressField()
+        exclude = ('territory',)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Add placeholders and classes, remove auto-generated
+        labels and set autofocus on first field
+        """
+        super().__init__(*args, **kwargs)
+        
+        placeholders = {
+            'address': 'Address',
+            'notes': 'Notes',
+        }
+
+        for field in self.fields:
+            placeholder = placeholders[field]
+            self.fields[field].widget.attrs['placeholder'] = placeholder
+            if field != 'address':
+                self.fields[field].widget.attrs['class'] = 'form-control'
+            else:
+                self.fields[field].widget.attrs['class'] = 'address form-control'

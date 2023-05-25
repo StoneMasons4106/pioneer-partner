@@ -7,7 +7,7 @@ import requests
 import urllib
 from django.contrib import messages
 from .models import Call, ReturnVisit, Territory, Street, NHRecord, DoNotCall
-from .forms import AddCall, AddReturnVisit, AddStreet, AddTerritory
+from .forms import AddCall, AddReturnVisit, AddStreet, AddTerritory, AddDoNotCall
 from datetime import date
 import json
 
@@ -500,3 +500,48 @@ def delete_territory(request, territory_id):
     territory.delete()
     messages.success(request, 'Territory has been deleted.')
     return redirect('congregation_territories')
+
+
+@login_required
+def do_not_call(request, territory_id, do_not_call_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    do_not_call = get_object_or_404(DoNotCall, pk=do_not_call_id)
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'do_not_call': do_not_call,
+    }
+
+    return render(request, 'service/do_not_call.html', context)
+
+
+@login_required
+def add_do_not_call(request, territory_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+
+    if request.method == 'POST':
+        form = AddDoNotCall(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.territory = territory
+            instance.save()
+            messages.success(request, 'Do not call added successfully.')
+            return redirect(request.META['HTTP_REFERER'])
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = AddDoNotCall()
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'form': form,
+        'page': 'Edit Congregation',
+    }
+
+    return render(request, 'service/add_do_not_call.html', context)

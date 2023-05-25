@@ -6,6 +6,9 @@
       <div class="col-lg-4 col-6">
           <h1>Territory</h1>
       </div>
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'add_do_not_call' territory.territory_id %}" class="btn btn-primary add-invite userview-admin-buttons"><i class="bi bi-plus-circle"></i> Add Do Not Call</a>
+      </div>
     </div>
     <nav>
       <ol class="breadcrumb">
@@ -72,7 +75,7 @@
                         </div>
                         <div class="ps-3 userview-schedule-data">
                           <h6>
-                            <a href="#" class="call-name">{{ call.address }}</a>
+                            <a href="{% url 'do_not_call' territory.territory_id call.id %}" class="call-name">{{ call.address }}</a>
                           </h6>
                         </div>
                       </div>
