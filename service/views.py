@@ -531,7 +531,10 @@ def add_do_not_call(request, territory_id):
             instance.territory = territory
             instance.save()
             messages.success(request, 'Do not call added successfully.')
-            return redirect(request.META['HTTP_REFERER'])
+            if territory.assigned_to == request.user:
+                return redirect('my_territory', territory_id=str(territory_id).zfill(16))
+            else:
+                return redirect('congregation_territory', territory_id=str(territory_id).zfill(16))
         else:
             messages.error(request, 'Update failed. Please ensure the form is valid.')
     else:
