@@ -484,9 +484,19 @@ def edit_territory(request, territory_id):
 
     context = {
         'profile': profile,
+        'groups': request.user.groups.all(),
         'territory': territory,
         'form': form,
         'title': 'Pioneer Partner - Edit Territory',
     }
 
     return render(request, 'service/edit_territory.html', context)
+
+
+@user_passes_test(congregation_admin_check, login_url='/congregation_territories/')
+def delete_territory(request, territory_id):
+
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    territory.delete()
+    messages.success(request, 'Territory has been deleted.')
+    return redirect('congregation_territories')

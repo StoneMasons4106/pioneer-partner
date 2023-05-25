@@ -2,7 +2,18 @@
 
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Edit Territory</h1>
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <h1>Edit Territory</h1>
+      </div>
+      {% for group in groups %}
+      {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'delete_congregation_territory' territory.territory_id %}" class="btn btn-danger add-invite"><i class="bi bi-trash"></i> Delete Territory</a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">

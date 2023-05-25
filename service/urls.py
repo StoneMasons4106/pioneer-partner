@@ -11,6 +11,7 @@ urlpatterns = [
     path('congregation_territories/add/', views.add_territory, name='add_congregation_territory'),
     path('congregation_territories/<int:territory_id>/', views.congregation_territory, name='congregation_territory'),
     path('congregation_territories/<int:territory_id>/edit/', views.edit_territory, name='edit_congregation_territory'),
+    path('congregation_territories/<int:territory_id>/delete/', views.delete_territory, name='delete_congregation_territory'),
     path('calls/return_visit/add/<int:call_id>/', views.add_return_visit, name='add_return_visit'),
     path('call/<int:call_id>/', views.call, name='call'),
     path('my_territory/<int:territory_id>/', views.my_territory, name='my_territory'),

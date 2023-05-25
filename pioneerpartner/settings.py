@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'pwa',
     'phonenumber_field',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
