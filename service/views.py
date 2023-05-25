@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from profiles.models import UserProfile
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
@@ -7,11 +7,24 @@ import requests
 import urllib
 from django.contrib import messages
 from .models import Call, ReturnVisit, Territory, Street, NHRecord, DoNotCall
-from .forms import AddCall, AddReturnVisit, AddStreet
+from .forms import AddCall, AddReturnVisit, AddStreet, AddTerritory
 from datetime import date
 import json
 
 # Create your views here.
+
+def congregation_admin_check(user):
+    response = False
+    
+    groups = user.groups.all()
+    for group in groups:
+        if group.name == 'Congregation Admin':
+            response = True
+        else:
+            continue
+
+    return response
+
 
 @login_required
 def cart_shifts(request):
@@ -385,6 +398,7 @@ def congregation_territories(request):
     context = {
         'profile': profile,
         'territories': territories,
+        'groups': request.user.groups.all(),
         'title': 'Pioneer Partner - Congregation Territories',
     }
 
@@ -408,9 +422,71 @@ def congregation_territory(request, territory_id):
 
     context = {
         'profile': profile,
+        'groups': request.user.groups.all(),
         'territory': territory,
         'do_not_calls': do_not_calls,
         'title': 'Pioneer Partner - Congregation Territory',
     }
 
     return render(request, 'service/congregation_territory.html', context)
+
+
+@user_passes_test(congregation_admin_check, login_url='/congregation_territories/')
+def add_territory(request):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = AddTerritory(profile.congregation, request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.congregation = profile.congregation
+            if instance.assigned_to:
+                instance.status = '2'
+                instance.signed_out = date.today()
+            else:
+                instance.status = '1'
+            instance.save()
+            messages.success(request, 'Territory added successfully.')
+            return redirect('congregation_territories')
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = AddTerritory(profile.congregation)
+
+    context = {
+        'profile': profile,
+        'form': form,
+        'title': 'Pioneer Partner - Add Territory',
+    }
+
+    return render(request, 'service/add_territory.html', context)
+
+
+@user_passes_test(congregation_admin_check, login_url='/congregation_territories/')
+def edit_territory(request, territory_id):
+
+    profile = get_object_or_404(UserProfile, user=request.user)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+
+    if request.method == 'POST':
+        form = AddTerritory(profile.congregation, request.POST, request.FILES, instance=territory)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.congregation = profile.congregation
+            instance.save()
+            messages.success(request, 'Territory edited successfully.')
+            return redirect('congregation_territory', territory_id=str(territory_id).zfill(16))
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        form = AddTerritory(profile.congregation, instance=territory)
+
+    context = {
+        'profile': profile,
+        'territory': territory,
+        'form': form,
+        'title': 'Pioneer Partner - Edit Territory',
+    }
+
+    return render(request, 'service/edit_territory.html', context)

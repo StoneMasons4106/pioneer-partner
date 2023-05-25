@@ -6,6 +6,13 @@
       <div class="col-lg-4 col-6">
           <h1>Territory</h1>
       </div>
+      {% for group in groups %}
+      {% if group.name == "Congregation Admin" %}
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'edit_congregation_territory' territory.territory_id %}" class="btn btn-primary add-invite"><i class="bi bi-pencil"></i> Edit Territory</a>
+      </div>
+      {% endif %}
+      {% endfor %}
     </div>
     <nav>
       <ol class="breadcrumb">
@@ -13,7 +20,7 @@
           <a href="{% url 'dashboard' %}">Home</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="{% url 'my_territories' %}">Congregation Territories</a>
+          <a href="{% url 'congregation_territories' %}">Congregation Territories</a>
         </li>
         <li class="breadcrumb-item active">Territory</li>
       </ol>
