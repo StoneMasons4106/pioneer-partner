@@ -19,7 +19,7 @@ class Call(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=10, choices=GENDERS, default='1')
     age = models.PositiveIntegerField(null=True, blank=True)
-    address = AddressField(null=True, blank=True)
+    address = AddressField(on_delete=models.CASCADE, null=True, blank=True)
     contact_date = models.DateField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True, max_length=3000)
 
@@ -108,7 +108,7 @@ class NHRecord(models.Model):
 
 class DoNotCall(models.Model):
 
-    address = AddressField()
+    address = AddressField(on_delete=models.CASCADE)
     territory = models.ForeignKey(Territory, on_delete=models.CASCADE)
     notes = models.TextField(max_length=3000)
 

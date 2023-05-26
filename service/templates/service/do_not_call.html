@@ -6,6 +6,9 @@
       <div class="col-lg-4 col-6">
         <h1>Do Not Call</h1>
       </div>
+      <div class="col-lg-4 col-6 text-end">
+        <a href="{% url 'delete_do_not_call' territory.territory_id do_not_call.id %}" class="btn btn-danger add-invite"><i class="bi bi-trash"></i> Remove Do Not Call</a>
+      </div>
     </div>
     </div>
     <nav>

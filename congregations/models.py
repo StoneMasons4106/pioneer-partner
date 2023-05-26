@@ -8,7 +8,7 @@ import string
 class Congregation(models.Model):
 
     name = models.CharField(max_length=254)
-    address = AddressField(null=True, blank=True)
+    address = AddressField(on_delete=models.CASCADE, null=True, blank=True)
     congregation_id = models.CharField(max_length=10, unique=True)
     number = models.CharField(max_length=10)
     justacart_token = models.CharField(max_length=254, null=True, blank=True)
@@ -38,7 +38,7 @@ class ServiceGroup(models.Model):
     name = models.CharField(max_length=254)
     service_group_id = models.CharField(max_length=10, unique=True)
     congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE)
-    service_location = AddressField(null=True, blank=True)
+    service_location = AddressField(on_delete=models.CASCADE, null=True, blank=True)
 
     def _generate_service_group_id(self):
         """
@@ -75,7 +75,7 @@ class ServiceMeeting(models.Model):
     time = models.TimeField(auto_now=False, auto_now_add=False)
     congregation = models.ForeignKey(Congregation, on_delete=models.CASCADE, null=True, blank=True)
     service_group = models.ForeignKey(ServiceGroup, on_delete=models.CASCADE, null=True, blank=True)
-    service_location = AddressField(null=True, blank=True)
+    service_location = AddressField(on_delete=models.CASCADE, null=True, blank=True)
     zoom = models.BooleanField(default=False, null=True, blank=True)
     zoom_id = models.CharField(max_length=30, null=True, blank=True)
     zoom_password = models.CharField(max_length=50, null=True, blank=True)

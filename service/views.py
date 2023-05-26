@@ -550,3 +550,16 @@ def add_do_not_call(request, territory_id):
     }
 
     return render(request, 'service/add_do_not_call.html', context)
+
+
+@login_required
+def delete_do_not_call(request, territory_id, do_not_call_id):
+
+    do_not_call = get_object_or_404(DoNotCall, pk=do_not_call_id)
+    territory = get_object_or_404(Territory, territory_id=str(territory_id).zfill(16))
+    do_not_call.delete()
+    messages.success(request, 'Do not call has been removed.')
+    if territory.assigned_to == request.user:
+        return redirect('my_territory', territory_id=str(territory_id).zfill(16))
+    else:
+        return redirect('congregation_territory', territory_id=str(territory_id).zfill(16))
